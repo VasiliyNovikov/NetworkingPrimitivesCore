@@ -1,0 +1,29 @@
+root = true
+
+[*]
+indent_style = space
+
+[*.{xml,slnx,csproj}]
+indent_size = 2
+
+[*.cs]
+indent_size = 4
+tab_width = 4
+insert_final_newline = false
+
+dotnet_separate_import_directive_groups = true
+dotnet_sort_system_directives_first = true
+csharp_style_namespace_declarations = file_scoped
+
+dotnet_diagnostic.IDE0008.severity = none  # Use explicit type
+dotnet_diagnostic.IDE0011.severity = none  # Add braces
+dotnet_diagnostic.IDE0021.severity = none  # Use block body for constructor
+dotnet_diagnostic.IDE0022.severity = none  # Use block body for method
+dotnet_diagnostic.IDE0023.severity = none  # Use block body for conversion operator
+dotnet_diagnostic.IDE0024.severity = none  # Use block body for operator
+
+dotnet_diagnostic.CS1591.severity = none  # Missing XML comment for publicly visible type or member
+
+[*{Tests,Benchmarks}.cs]
+dotnet_diagnostic.CA1707.severity = none  # Identifiers should not contain underscores
+dotnet_diagnostic.CA1822.severity = none  # Mark members as static

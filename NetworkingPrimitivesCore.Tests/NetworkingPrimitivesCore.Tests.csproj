@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../NetworkingPrimitivesCore.props" />
+  <ItemGroup>
+    <PackageReference Include="MSTest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetworkingPrimitivesCore\NetworkingPrimitivesCore.csproj" />
+  </ItemGroup>
+</Project>
