@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../NetworkingPrimitivesCore.props" />
+  <PropertyGroup>
+    <IsAotCompatible>true</IsAotCompatible>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Version>0.1.0</Version>
+    <PackageVersion>$(Version)</PackageVersion>
+    <Authors>Vasyl Novikov</Authors>
+    <Description>Networking primitives like NetInt, IPv4/IPv6 address/network, MAC address</Description>
+    <Copyright>Vasyl Novikov</Copyright>
+    <PackageProjectUrl>https://github.com/VasiliyNovikov/NetworkingPrimitivesCore</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/VasiliyNovikov/NetworkingPrimitivesCore</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>net;networking;primitives</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>

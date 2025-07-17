@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../NetworkingPrimitivesCore.props" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetworkingPrimitivesCore\NetworkingPrimitivesCore.csproj" />
+  </ItemGroup>
+</Project>

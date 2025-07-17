@@ -1,0 +1,73 @@
+name: Validate & Publish
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  validate:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+          - windows-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+
+      - name: Build
+        run: dotnet build
+
+      - name: Test
+        run: dotnet test --no-build --logger trx --results-directory "TestResults-${{ matrix.os }}"
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}
+          path: TestResults-${{ matrix.os }}
+        if: ${{ always() }}
+
+  publish:
+    if: ${{ success() && (vars.PUBLISH == 'true' || vars.PUBLISH == 'auto' && github.ref_name == 'master') }}
+    needs:
+      - validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+
+      - name: Build
+        run: dotnet build -c Release
+
+      - name: Package Version
+        id: package_version
+        run: |
+          version=$(dotnet run ./.github/workflows/package_version.cs)
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Pack
+        run: dotnet pack ./NetworkingPrimitivesCore/NetworkingPrimitivesCore.csproj -c Release --no-build -p:Version=${{ steps.package_version.outputs.version }}
+
+      - name: Push
+        run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
