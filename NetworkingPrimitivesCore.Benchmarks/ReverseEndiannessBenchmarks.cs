@@ -116,18 +116,5 @@ public class ReverseEndiannessBenchmarks
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static T ReverseEndianness<T>(T value) where T : unmanaged, IBinaryInteger<T>
-    {
-#pragma warning disable IDE0046 // Convert to conditional expression
-        if (typeof(T) == typeof(ushort))
-            return (T)(object)BinaryPrimitives.ReverseEndianness((ushort)(object)value);
-        if (typeof(T) == typeof(uint))
-            return (T)(object)BinaryPrimitives.ReverseEndianness((uint)(object)value);
-        if (typeof(T) == typeof(ulong))
-            return (T)(object)BinaryPrimitives.ReverseEndianness((ulong)(object)value);
-        if (typeof(T) == typeof(UInt128))
-            return (T)(object)BinaryPrimitives.ReverseEndianness((UInt128)(object)value);
-        throw new NotSupportedException();
-#pragma warning restore IDE0046 // Convert to conditional expression
-    }
+    private static T ReverseEndianness<T>(T value) where T : unmanaged, IBinaryInteger<T> => BinaryPrimitives.ReverseEndianness(value);
 }
