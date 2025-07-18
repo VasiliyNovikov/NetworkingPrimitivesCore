@@ -9,6 +9,7 @@ using NetworkingPrimitivesCore.Formatting;
 using NetworkingPrimitivesCore.Json;
 
 using NetInt48 = NetworkingPrimitivesCore.NetInt<NetworkingPrimitivesCore.UInt48>;
+using OperatorHelper = NetworkingPrimitivesCore.NetIntConvertibleOperatorHelper<NetworkingPrimitivesCore.MacAddress, NetworkingPrimitivesCore.UInt48>;
 
 namespace NetworkingPrimitivesCore;
 
@@ -28,7 +29,7 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     public ReadOnlySpan<byte> Bytes
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref Unsafe.AsRef(in _value), 1));
+        get => MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref Unsafe.AsRef(in this), 1));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -38,10 +39,10 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     public MacAddress(ReadOnlySpan<byte> addressBytes) => _value = MemoryMarshal.Read<NetInt48>(addressBytes);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override int GetHashCode() => _value.GetHashCode();
+    public override int GetHashCode() => OperatorHelper.GetHashCode(this);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Equals(MacAddress other) => this == other;
+    public bool Equals(MacAddress other) => OperatorHelper.Equal(this, other);
     public override bool Equals(object? obj) => obj is MacAddress other && this == other;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -50,7 +51,7 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     public static bool operator !=(MacAddress left, MacAddress right) => OperatorHelper.NotEqual(left, right);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int CompareTo(MacAddress other) => _value.CompareTo(other._value);
+    public int CompareTo(MacAddress other) => OperatorHelper.Compare(this, other);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator <(MacAddress left, MacAddress right) => OperatorHelper.LessThan(left, right);
@@ -62,9 +63,23 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     public static bool operator >=(MacAddress left, MacAddress right) => OperatorHelper.GreaterThanOrEqual(left, right);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static MacAddress operator ~(MacAddress value) => OperatorHelper.Not(value);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static MacAddress operator &(MacAddress left, MacAddress right) => OperatorHelper.And(left, right);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static MacAddress operator |(MacAddress left, MacAddress right) => OperatorHelper.Or(left, right);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static MacAddress operator ^(MacAddress left, MacAddress right) => OperatorHelper.Xor(left, right);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator NetInt48(MacAddress value) => value._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator MacAddress(NetInt48 value) => new(value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator UInt48(MacAddress value) => OperatorHelper.ToInt(value);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator MacAddress(UInt48 value) => OperatorHelper.FromInt(value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString() => ToString(null);

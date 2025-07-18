@@ -12,49 +12,24 @@ public interface INetAddress<T, TInt>
       IComparisonOperators<T, T, bool>,
       IBitwiseOperators<T, T, T>,
       ISpanParsable<T>,
-      ISpanFormattable
+      ISpanFormattable,
+      INetIntConvertible<T, TInt>
     where T : unmanaged, INetAddress<T, TInt>
     where TInt : unmanaged, IBinaryInteger<TInt>, IUnsignedNumber<TInt>, IMinMaxValue<TInt>
 {
     static abstract int MaxStringLength { get; }
+    static virtual T Broadcast => (T)TInt.MaxValue;
+
     ReadOnlySpan<byte> Bytes { get; }
 
     bool TryFormat(Span<char> destination, out int charsWritten);
 
-    static virtual T Broadcast => (T)TInt.MaxValue;
-
     static abstract bool TryParse(ReadOnlySpan<char> source, out T result);
 
-    static abstract explicit operator NetInt<TInt>(T value);
-    static abstract explicit operator T(NetInt<TInt> value);
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static virtual explicit operator TInt(T value) => (TInt)(NetInt<TInt>)value;
+    static abstract explicit operator TInt(T value);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static virtual explicit operator T(TInt value) => (T)(NetInt<TInt>)value;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static bool IEqualityOperators<T, T, bool>.operator ==(T a, T b) => (NetInt<TInt>)a == (NetInt<TInt>)b;
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static bool IEqualityOperators<T, T, bool>.operator !=(T a, T b) => !(a == b);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static bool IComparisonOperators<T, T, bool>.operator <(T a, T b) => (TInt)a < (TInt)b;
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static bool IComparisonOperators<T, T, bool>.operator >(T a, T b) => (TInt)a > (TInt)b;
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static bool IComparisonOperators<T, T, bool>.operator <=(T a, T b) => (TInt)a <= (TInt)b;
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static bool IComparisonOperators<T, T, bool>.operator >=(T a, T b) => (TInt)a >= (TInt)b;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static T IBitwiseOperators<T, T, T>.operator ~(T value) => (T)~(NetInt<TInt>)value;
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static T IBitwiseOperators<T, T, T>.operator &(T a, T b) => (T)((NetInt<TInt>)a & (NetInt<TInt>)b);
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static T IBitwiseOperators<T, T, T>.operator |(T a, T b) => (T)((NetInt<TInt>)a | (NetInt<TInt>)b);
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static T IBitwiseOperators<T, T, T>.operator ^(T a, T b) => (T)((NetInt<TInt>)a ^ (NetInt<TInt>)b);
+    static abstract explicit operator T(TInt value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     static bool ISpanParsable<T>.TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out T result) => T.TryParse(s, out result);
