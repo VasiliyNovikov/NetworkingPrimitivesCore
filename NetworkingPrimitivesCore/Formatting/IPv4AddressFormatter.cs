@@ -11,7 +11,7 @@ internal static class IPv4AddressFormatter
     public static bool TryParse(ReadOnlySpan<char> source, Span<byte> ipAddressBytes)
     {
         var reader = new SpanReader<char>(source);
-        for (var i = 0; i < Unsafe.SizeOf<IPv4Address>(); ++i)
+        for (var i = 0; i < ipAddressBytes.Length; ++i)
         {
             if (i > 0 && !TryReadRequiredSeparator(ref reader))
                 return false;
@@ -64,7 +64,7 @@ internal static class IPv4AddressFormatter
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static bool TryWrite(ref SpanWriter<char> writer, ReadOnlySpan<byte> ipAddressBytes)
     {
-        for (var i = 0; i < Unsafe.SizeOf<IPv4Address>(); ++i)
+        for (var i = 0; i < ipAddressBytes.Length; ++i)
         {
             if (i > 0 && !writer.TryWrite(Separator))
                 return false;
