@@ -20,10 +20,16 @@ public ref struct SpanReader<TChar>(ReadOnlySpan<TChar> source)
         get => _position;
     }
 
+    public readonly bool IsEndOfSource
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => _position == _source.Length;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private readonly bool TryPeekCore(out TChar value)
     {
-        if (_position == _source.Length)
+        if (IsEndOfSource)
         {
             Unsafe.SkipInit(out value);
             return false;
@@ -38,7 +44,7 @@ public ref struct SpanReader<TChar>(ReadOnlySpan<TChar> source)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TrySkip()
     {
-        if (_position == _source.Length)
+        if (IsEndOfSource)
             return false;
         ++_position;
         return true;

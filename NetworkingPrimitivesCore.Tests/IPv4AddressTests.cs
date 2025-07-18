@@ -1,0 +1,34 @@
+using System.Runtime.CompilerServices;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using FrameworkIPAddress = System.Net.IPAddress;
+
+namespace NetworkingPrimitivesCore.Tests;
+
+[TestClass]
+public class IPv4AddressTests
+{
+    [TestMethod]
+    public void IPv4Address_Size_Test() => Assert.AreEqual(4, Unsafe.SizeOf<IPv4Address>());
+
+    private static object[][] Test_IPAddresses() =>
+    [
+        ["127.0.0.1"],
+        ["192.168.0.1"]
+    ];
+
+    [TestMethod]
+    [DynamicData(nameof(Test_IPAddresses), DynamicDataSourceType.Method)]
+    public void IPv4Address_Parse_Format_Test(string address)
+    {
+        var fwAddress = FrameworkIPAddress.Parse(address);
+        var ipAddress = IPv4Address.Parse(address);
+
+        var expectedAddressStr = fwAddress.ToString();
+        var actualAddressStr = ipAddress.ToString();
+
+        CollectionAssert.AreEqual(fwAddress.GetAddressBytes(), ipAddress.Bytes.ToArray());
+        Assert.AreEqual(expectedAddressStr, actualAddressStr);
+    }
+}

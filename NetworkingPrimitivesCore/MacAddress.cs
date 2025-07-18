@@ -39,6 +39,16 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     public MacAddress(ReadOnlySpan<byte> addressBytes) => _value = MemoryMarshal.Read<NetInt48>(addressBytes);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator NetInt48(MacAddress value) => value._value;
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator MacAddress(NetInt48 value) => new(value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator UInt48(MacAddress value) => OperatorHelper.ToInt(value);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator MacAddress(UInt48 value) => OperatorHelper.FromInt(value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => OperatorHelper.GetHashCode(this);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -70,16 +80,6 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     public static MacAddress operator |(MacAddress left, MacAddress right) => OperatorHelper.Or(left, right);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static MacAddress operator ^(MacAddress left, MacAddress right) => OperatorHelper.Xor(left, right);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator NetInt48(MacAddress value) => value._value;
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator MacAddress(NetInt48 value) => new(value);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator UInt48(MacAddress value) => OperatorHelper.ToInt(value);
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator MacAddress(UInt48 value) => OperatorHelper.FromInt(value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString() => ToString(null);
