@@ -17,6 +17,8 @@ namespace NetworkingPrimitivesCore;
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
 {
+    public const int StringLength = 17; // 6 bytes * 2 hex digits + 5 separators (e.g., "00:00:00:00:00:00")
+
     private readonly NetInt48 _value;
 
     public ReadOnlySpan<byte> Bytes
@@ -64,7 +66,7 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     public override string ToString() => ToString(null);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public string ToString(string? format) => FormattingHelper.ToString(this, MacAddressFormatter.StringLength, format);
+    public string ToString(string? format) => FormattingHelper.ToString(this, StringLength, format);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Format(Span<char> destination, ReadOnlySpan<char> format = default) => FormattingHelper.Format(this, destination, format);

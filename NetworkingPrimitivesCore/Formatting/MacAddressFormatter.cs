@@ -5,12 +5,6 @@ namespace NetworkingPrimitivesCore.Formatting;
 
 internal static class MacAddressFormatter
 {
-    public static int StringLength
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => 17;
-    }
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool TryReadRequiredSeparator(ref SpanReader<char> reader) => reader.TryRead(out var ch) && ch is ':' or '-';
 
