@@ -7,7 +7,7 @@ using NetworkingPrimitivesCore.Formatting;
 
 namespace NetworkingPrimitivesCore.Converters;
 
-public abstract class SpanTypeConverter<T> : TypeConverter
+internal abstract class SpanTypeConverter<T> : TypeConverter
     where T : ISpanFormattable, ISpanParsable<T>
 {
     protected abstract int MaxStringLength { get; }

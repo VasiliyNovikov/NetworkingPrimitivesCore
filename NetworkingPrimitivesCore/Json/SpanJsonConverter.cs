@@ -7,7 +7,7 @@ using NetworkingPrimitivesCore.Formatting;
 
 namespace NetworkingPrimitivesCore.Json;
 
-public abstract class SpanJsonConverter<T> : JsonConverter<T>
+internal abstract class SpanJsonConverter<T> : JsonConverter<T>
     where T : ISpanFormattable, ISpanParsable<T>
 {
     protected abstract int MaxStringLength { get; }

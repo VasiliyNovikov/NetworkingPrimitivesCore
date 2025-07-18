@@ -12,12 +12,16 @@ using NetInt48 = NetworkingPrimitivesCore.NetInt<NetworkingPrimitivesCore.UInt48
 
 namespace NetworkingPrimitivesCore;
 
-[JsonConverter(typeof(JsonMacAddressConverter))]
-[TypeConverter(typeof(MacAddressCoverter))]
+[JsonConverter(typeof(JsonNetAddressConverter<MacAddress, UInt48>))]
+[TypeConverter(typeof(NetAddressConverter<MacAddress, UInt48>))]
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
 {
-    public const int StringLength = 17; // 6 bytes * 2 hex digits + 5 separators (e.g., "00:00:00:00:00:00")
+    public static int MaxStringLength
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => 17; // 6 bytes * 2 hex digits + 5 separators (e.g., "00:00:00:00:00:00")
+    }
 
     private readonly NetInt48 _value;
 
@@ -37,25 +41,25 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     public override int GetHashCode() => _value.GetHashCode();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Equals(MacAddress other) => _value == other._value;
-    public override bool Equals(object? obj) => obj is MacAddress other && Equals(other);
+    public bool Equals(MacAddress other) => this == other;
+    public override bool Equals(object? obj) => obj is MacAddress other && this == other;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(MacAddress a, MacAddress b) => a._value == b._value;
+    public static bool operator ==(MacAddress left, MacAddress right) => OperatorHelper.Equal(left, right);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(MacAddress a, MacAddress b) => !(a == b);
+    public static bool operator !=(MacAddress left, MacAddress right) => OperatorHelper.NotEqual(left, right);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int CompareTo(MacAddress other) => _value.CompareTo(other._value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator <(MacAddress a, MacAddress b) => a._value < b._value;
+    public static bool operator <(MacAddress left, MacAddress right) => OperatorHelper.LessThan(left, right);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator >(MacAddress a, MacAddress b) => a._value > b._value;
+    public static bool operator >(MacAddress left, MacAddress right) => OperatorHelper.GreaterThan(left, right);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator <=(MacAddress a, MacAddress b) => a._value <= b._value;
+    public static bool operator <=(MacAddress left, MacAddress right) => OperatorHelper.LessThanOrEqual(left, right);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator >=(MacAddress a, MacAddress b) => a._value >= b._value;
+    public static bool operator >=(MacAddress left, MacAddress right) => OperatorHelper.GreaterThanOrEqual(left, right);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator NetInt48(MacAddress value) => value._value;
@@ -66,13 +70,13 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     public override string ToString() => ToString(null);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public string ToString(string? format) => FormattingHelper.ToString(this, StringLength, format);
+    public string ToString(string? format) => FormattingHelper.ToString(this, MaxStringLength, format);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Format(Span<char> destination, ReadOnlySpan<char> format = default) => FormattingHelper.Format(this, destination, format);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryFormat(Span<char> destination, out int charsWritten) => MacAddressFormatter.TryFormat(Bytes, destination, out charsWritten, default);
+    public bool TryFormat(Span<char> destination, out int charsWritten) => TryFormat(destination, out charsWritten, default);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format) => MacAddressFormatter.TryFormat(Bytes, destination, out charsWritten, format);
@@ -96,14 +100,12 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static MacAddress Parse(string source) => FormattingHelper.Parse<MacAddress>(source);
 
-    #region ISpanFormattable, IFormattable, ISpanParsable and IParsable implementations
+    #region ISpanFormattable, IFormattable implementations
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     string IFormattable.ToString(string? format, IFormatProvider? provider) => ToString(format);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     bool ISpanFormattable.TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider) => TryFormat(destination, out charsWritten, format);
-    static bool ISpanParsable<MacAddress>.TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out MacAddress result) => TryParse(s, out result);
-    static bool IParsable<MacAddress>.TryParse(string? s, IFormatProvider? provider, out MacAddress result) => TryParse(s.AsSpan(), out result);
-    static MacAddress ISpanParsable<MacAddress>.Parse(ReadOnlySpan<char> s, IFormatProvider? provider) => Parse(s);
-    static MacAddress IParsable<MacAddress>.Parse(string s, IFormatProvider? provider) => Parse(s);
 
     #endregion
 }

@@ -31,7 +31,7 @@ public class MacAddressBenchmarks
     [Benchmark]
     public void Format_MacAddress()
     {
-        Span<char> buffer = stackalloc char[MacAddress.StringLength];
+        Span<char> buffer = stackalloc char[MacAddress.MaxStringLength];
         foreach (var address in TestMacAddresses)
             if (!address.TryFormat(buffer, out _))
                 throw new InvalidOperationException();
