@@ -2,6 +2,7 @@
   <Import Project="../NetworkingPrimitivesCore.props" />
   <ItemGroup>
     <PackageReference Include="MSTest" />
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetworkingPrimitivesCore\NetworkingPrimitivesCore.csproj" />

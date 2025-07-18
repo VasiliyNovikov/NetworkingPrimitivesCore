@@ -8,11 +8,17 @@ using System.Runtime.InteropServices;
 
 namespace NetworkingPrimitivesCore;
 
+// A lot of things copied from System.UInt64
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct UInt48 : IBinaryInteger<UInt48>, IMinMaxValue<UInt48>, IEquatable<UInt48>, IComparable<UInt48>
+public readonly struct UInt48
+    : IBinaryInteger<UInt48>
+    , IUnsignedNumber<UInt48>
+    , IMinMaxValue<UInt48>
+    , IEquatable<UInt48>
+    , IComparable<UInt48>
 {
-#pragma warning disable CS0169  // The field is never used
-#pragma warning disable IDE0051 //  Private member is unused
+#pragma warning disable CS0169 // The field is never used
+#pragma warning disable IDE0051 // Private member is unused
     private readonly struct Data
     {
         private readonly ushort _a;
@@ -213,7 +219,7 @@ public readonly struct UInt48 : IBinaryInteger<UInt48>, IMinMaxValue<UInt48>, IE
     public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out UInt48 result) => TryParse(s.AsSpan(), provider, out result);
 
 
-    // Copied from UInt64
+    // Copied from System.UInt64
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool TryReadBigEndian(ReadOnlySpan<byte> source, bool isUnsigned, out UInt48 value)
     {
@@ -258,7 +264,7 @@ public readonly struct UInt48 : IBinaryInteger<UInt48>, IMinMaxValue<UInt48>, IE
         return true;
     }
 
-    // Copied from UInt64
+    // Copied from System.UInt64
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool TryReadLittleEndian(ReadOnlySpan<byte> source, bool isUnsigned, out UInt48 value)
     {
