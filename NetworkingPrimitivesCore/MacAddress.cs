@@ -8,7 +8,7 @@ using NetworkingPrimitivesCore.Converters;
 using NetworkingPrimitivesCore.Formatting;
 using NetworkingPrimitivesCore.Json;
 
-using NetInt48 = NetworkingPrimitivesCore.NetInt<NetworkingPrimitivesCore.UInt48>;
+using NetUInt48 = NetworkingPrimitivesCore.NetInt<NetworkingPrimitivesCore.UInt48>;
 using OperatorHelper = NetworkingPrimitivesCore.NetIntConvertibleOperatorHelper<NetworkingPrimitivesCore.MacAddress, NetworkingPrimitivesCore.UInt48>;
 
 namespace NetworkingPrimitivesCore;
@@ -24,7 +24,7 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
         get => 17; // 6 bytes * 2 hex digits + 5 separators (e.g., "00:00:00:00:00:00")
     }
 
-    private readonly NetInt48 _value;
+    private readonly NetUInt48 _value;
 
     public ReadOnlySpan<byte> Bytes
     {
@@ -33,15 +33,15 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private MacAddress(NetInt48 value) => _value = value;
+    private MacAddress(NetUInt48 value) => _value = value;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public MacAddress(ReadOnlySpan<byte> addressBytes) => _value = MemoryMarshal.Read<NetInt48>(addressBytes);
+    public MacAddress(ReadOnlySpan<byte> addressBytes) => _value = MemoryMarshal.Read<NetUInt48>(addressBytes);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator NetInt48(MacAddress value) => value._value;
+    public static explicit operator NetUInt48(MacAddress value) => value._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator MacAddress(NetInt48 value) => new(value);
+    public static explicit operator MacAddress(NetUInt48 value) => new(value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator UInt48(MacAddress value) => OperatorHelper.ToInt(value);
