@@ -13,7 +13,6 @@ using OperatorHelper = NetworkingPrimitivesCore.NetIntConvertibleOperatorHelper<
 
 namespace NetworkingPrimitivesCore;
 
-
 [JsonConverter(typeof(JsonNetAddressConverter<IPv4Address, uint>))]
 [TypeConverter(typeof(NetAddressConverter<IPv4Address, uint>))]
 [StructLayout(LayoutKind.Sequential)]

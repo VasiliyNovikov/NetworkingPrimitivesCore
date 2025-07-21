@@ -6,13 +6,15 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace NetworkingPrimitivesCore.Tests;
 
 [TestClass]
-public class IPv6AddressTests
+public class IPAnyAddressTests
 {
     [TestMethod]
-    public void IPv6Address_Size_Test() => Assert.AreEqual(16, Unsafe.SizeOf<IPv6Address>());
+    public void IPAnyAddress_Size_Test() => Assert.AreEqual(17, Unsafe.SizeOf<IPAnyAddress>());
 
     private static object[][] Test_IPAddresses() =>
     [
+        ["127.0.0.1"],
+        ["192.168.0.1"],
         ["::"],
         ["::1"],
         ["fec0::1"],
@@ -25,10 +27,10 @@ public class IPv6AddressTests
 
     [TestMethod]
     [DynamicData(nameof(Test_IPAddresses), DynamicDataSourceType.Method)]
-    public void IPv6Address_Parse_Format_Test(string address)
+    public void IPAnyAddress_Parse_Format_Test(string address)
     {
         var fwAddress = IPAddress.Parse(address);
-        var ipAddress = IPv6Address.Parse(address);
+        var ipAddress = IPAnyAddress.Parse(address);
 
         var expectedAddressStr = fwAddress.ToString();
         var actualAddressStr = ipAddress.ToString();

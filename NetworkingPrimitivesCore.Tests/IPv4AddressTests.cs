@@ -1,8 +1,7 @@
+using System.Net;
 using System.Runtime.CompilerServices;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using FrameworkIPAddress = System.Net.IPAddress;
 
 namespace NetworkingPrimitivesCore.Tests;
 
@@ -22,7 +21,7 @@ public class IPv4AddressTests
     [DynamicData(nameof(Test_IPAddresses), DynamicDataSourceType.Method)]
     public void IPv4Address_Parse_Format_Test(string address)
     {
-        var fwAddress = FrameworkIPAddress.Parse(address);
+        var fwAddress = IPAddress.Parse(address);
         var ipAddress = IPv4Address.Parse(address);
 
         var expectedAddressStr = fwAddress.ToString();
