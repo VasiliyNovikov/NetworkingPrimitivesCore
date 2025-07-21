@@ -8,9 +8,9 @@ public interface IIPAddressBase<T> : INetAddressBase<T>
     bool IsLinkLocal { get; }
 }
 
-public interface IIPAddress<T, TInt> : INetAddress<T, TInt>
-    where T : unmanaged, IIPAddress<T, TInt>
-    where TInt : unmanaged, IBinaryInteger<TInt>, IUnsignedNumber<TInt>, IMinMaxValue<TInt>
+public interface IIPAddress<T, TUInt> : INetAddress<T, TUInt>
+    where T : unmanaged, IIPAddress<T, TUInt>
+    where TUInt : unmanaged, IBinaryInteger<TUInt>, IUnsignedNumber<TUInt>, IMinMaxValue<TUInt>
 {
     static abstract T Any { get; }
     static abstract T Loopback { get; }

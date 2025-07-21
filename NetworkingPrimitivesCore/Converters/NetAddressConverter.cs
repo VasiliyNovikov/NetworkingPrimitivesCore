@@ -1,10 +1,7 @@
-using System.Numerics;
-
 namespace NetworkingPrimitivesCore.Converters;
 
-internal sealed class NetAddressConverter<T, TInt> : SpanTypeConverter<T>
-    where T : unmanaged, INetAddress<T, TInt>
-    where TInt : unmanaged, IBinaryInteger<TInt>, IUnsignedNumber<TInt>, IMinMaxValue<TInt>
+internal sealed class NetAddressConverter<T> : SpanTypeConverter<T>
+    where T : unmanaged, INetAddressBase<T>
 {
     protected override int MaxStringLength => T.MaxStringLength;
 }

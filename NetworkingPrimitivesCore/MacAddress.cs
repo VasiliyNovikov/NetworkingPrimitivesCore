@@ -13,8 +13,8 @@ using OperatorHelper = NetworkingPrimitivesCore.NetIntConvertibleOperatorHelper<
 
 namespace NetworkingPrimitivesCore;
 
-[JsonConverter(typeof(JsonNetAddressConverter<MacAddress, UInt48>))]
-[TypeConverter(typeof(NetAddressConverter<MacAddress, UInt48>))]
+[JsonConverter(typeof(JsonNetAddressConverter<MacAddress>))]
+[TypeConverter(typeof(NetAddressConverter<MacAddress>))]
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
 {

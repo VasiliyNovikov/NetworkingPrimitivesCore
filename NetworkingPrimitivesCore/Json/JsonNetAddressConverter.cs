@@ -1,10 +1,7 @@
-using System.Numerics;
-
 namespace NetworkingPrimitivesCore.Json;
 
-internal sealed class JsonNetAddressConverter<T, TInt> : SpanJsonConverter<T>
-    where T : unmanaged, INetAddress<T, TInt>
-    where TInt : unmanaged, IBinaryInteger<TInt>, IUnsignedNumber<TInt>, IMinMaxValue<TInt>
+internal sealed class JsonNetAddressConverter<T> : SpanJsonConverter<T>
+    where T : unmanaged, INetAddressBase<T>
 {
     protected override int MaxStringLength => T.MaxStringLength;
 }

@@ -1,13 +1,19 @@
 using System;
+using System.ComponentModel;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text.Json.Serialization;
 
+using NetworkingPrimitivesCore.Converters;
 using NetworkingPrimitivesCore.Formatting;
+using NetworkingPrimitivesCore.Json;
 
 namespace NetworkingPrimitivesCore;
 
+[JsonConverter(typeof(JsonNetAddressConverter<IPAnyAddress>))]
+[TypeConverter(typeof(NetAddressConverter<IPAnyAddress>))]
 [StructLayout(LayoutKind.Explicit, Pack = 1)]
 public readonly struct IPAnyAddress
     : IIPAddressBase<IPAnyAddress>

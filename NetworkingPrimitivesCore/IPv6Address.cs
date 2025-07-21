@@ -13,8 +13,8 @@ using OperatorHelper = NetworkingPrimitivesCore.NetIntConvertibleOperatorHelper<
 
 namespace NetworkingPrimitivesCore;
 
-[JsonConverter(typeof(JsonNetAddressConverter<IPv6Address, UInt128>))]
-[TypeConverter(typeof(NetAddressConverter<IPv6Address, UInt128>))]
+[JsonConverter(typeof(JsonNetAddressConverter<IPv6Address>))]
+[TypeConverter(typeof(NetAddressConverter<IPv6Address>))]
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct IPv6Address : IIPAddress<IPv6Address, UInt128>
 {

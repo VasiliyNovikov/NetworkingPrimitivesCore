@@ -32,17 +32,17 @@ public interface INetAddressBase<T>
     static T IParsable<T>.Parse(string s, IFormatProvider? provider) => FormattingHelper.Parse<T>(s, provider);
 }
 
-public interface INetAddress<T, TInt>
+public interface INetAddress<T, TUInt>
     : INetAddressBase<T>
     , IBitwiseOperators<T, T, T>
-    , INetIntConvertible<T, TInt>
-    where T : unmanaged, INetAddress<T, TInt>
-    where TInt : unmanaged, IBinaryInteger<TInt>, IUnsignedNumber<TInt>, IMinMaxValue<TInt>
+    , INetIntConvertible<T, TUInt>
+    where T : unmanaged, INetAddress<T, TUInt>
+    where TUInt : unmanaged, IBinaryInteger<TUInt>, IUnsignedNumber<TUInt>, IMinMaxValue<TUInt>
 {
-    static virtual T Broadcast => (T)TInt.MaxValue;
+    static virtual T Broadcast => (T)TUInt.MaxValue;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static abstract explicit operator TInt(T value);
+    static abstract explicit operator TUInt(T value);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static abstract explicit operator T(TInt value);
+    static abstract explicit operator T(TUInt value);
 }
