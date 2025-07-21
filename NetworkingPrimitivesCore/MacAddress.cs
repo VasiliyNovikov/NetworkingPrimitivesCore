@@ -9,7 +9,6 @@ using NetworkingPrimitivesCore.Formatting;
 using NetworkingPrimitivesCore.Json;
 
 using NetUInt48 = NetworkingPrimitivesCore.NetInt<NetworkingPrimitivesCore.UInt48>;
-using OperatorHelper = NetworkingPrimitivesCore.NetIntConvertibleOperatorHelper<NetworkingPrimitivesCore.MacAddress, NetworkingPrimitivesCore.UInt48>;
 
 namespace NetworkingPrimitivesCore;
 
@@ -44,42 +43,42 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     public static explicit operator MacAddress(NetUInt48 value) => new(value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator UInt48(MacAddress value) => OperatorHelper.ToInt(value);
+    public static explicit operator UInt48(MacAddress value) => (UInt48)value._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator MacAddress(UInt48 value) => OperatorHelper.FromInt(value);
+    public static explicit operator MacAddress(UInt48 value) => new((NetUInt48)value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override int GetHashCode() => OperatorHelper.GetHashCode(this);
+    public override int GetHashCode() => _value.GetHashCode();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Equals(MacAddress other) => OperatorHelper.Equal(this, other);
+    public bool Equals(MacAddress other) => _value.Equals(other._value);
     public override bool Equals(object? obj) => obj is MacAddress other && this == other;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(MacAddress left, MacAddress right) => OperatorHelper.Equal(left, right);
+    public static bool operator ==(MacAddress left, MacAddress right) => left._value == right._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(MacAddress left, MacAddress right) => OperatorHelper.NotEqual(left, right);
+    public static bool operator !=(MacAddress left, MacAddress right) => left._value != right._value;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int CompareTo(MacAddress other) => OperatorHelper.Compare(this, other);
+    public int CompareTo(MacAddress other) => _value.CompareTo(other._value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator <(MacAddress left, MacAddress right) => OperatorHelper.LessThan(left, right);
+    public static bool operator <(MacAddress left, MacAddress right) => left._value < right._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator >(MacAddress left, MacAddress right) => OperatorHelper.GreaterThan(left, right);
+    public static bool operator >(MacAddress left, MacAddress right) => left._value > right._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator <=(MacAddress left, MacAddress right) => OperatorHelper.LessThanOrEqual(left, right);
+    public static bool operator <=(MacAddress left, MacAddress right) => left._value <= right._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator >=(MacAddress left, MacAddress right) => OperatorHelper.GreaterThanOrEqual(left, right);
+    public static bool operator >=(MacAddress left, MacAddress right) => left._value >= right._value;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static MacAddress operator ~(MacAddress value) => OperatorHelper.Not(value);
+    public static MacAddress operator ~(MacAddress value) => new(~value._value);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static MacAddress operator &(MacAddress left, MacAddress right) => OperatorHelper.And(left, right);
+    public static MacAddress operator &(MacAddress left, MacAddress right) => new(left._value & right._value);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static MacAddress operator |(MacAddress left, MacAddress right) => OperatorHelper.Or(left, right);
+    public static MacAddress operator |(MacAddress left, MacAddress right) => new(left._value | right._value);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static MacAddress operator ^(MacAddress left, MacAddress right) => OperatorHelper.Xor(left, right);
+    public static MacAddress operator ^(MacAddress left, MacAddress right) => new(left._value ^ right._value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString() => ToString(null);

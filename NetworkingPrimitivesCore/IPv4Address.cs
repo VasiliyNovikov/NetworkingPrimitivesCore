@@ -9,7 +9,6 @@ using NetworkingPrimitivesCore.Formatting;
 using NetworkingPrimitivesCore.Json;
 
 using NetUInt32 = NetworkingPrimitivesCore.NetInt<uint>;
-using OperatorHelper = NetworkingPrimitivesCore.NetIntConvertibleOperatorHelper<NetworkingPrimitivesCore.IPv4Address, uint>;
 
 namespace NetworkingPrimitivesCore;
 
@@ -68,42 +67,42 @@ public readonly struct IPv4Address : IIPAddress<IPv4Address, uint>
     public static explicit operator IPv4Address(NetUInt32 value) => new(value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator uint(IPv4Address value) => OperatorHelper.ToInt(value);
+    public static explicit operator uint(IPv4Address value) => (uint)value._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator IPv4Address(uint value) => OperatorHelper.FromInt(value);
+    public static explicit operator IPv4Address(uint value) => new((NetUInt32)value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override int GetHashCode() => OperatorHelper.GetHashCode(this);
+    public override int GetHashCode() => _value.GetHashCode();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Equals(IPv4Address other) => OperatorHelper.Equal(this, other);
+    public bool Equals(IPv4Address other) => _value.Equals(other._value);
     public override bool Equals(object? obj) => obj is IPv4Address other && this == other;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(IPv4Address left, IPv4Address right) => OperatorHelper.Equal(left, right);
+    public static bool operator ==(IPv4Address left, IPv4Address right) => left._value == right._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(IPv4Address left, IPv4Address right) => OperatorHelper.NotEqual(left, right);
+    public static bool operator !=(IPv4Address left, IPv4Address right) => left._value != right._value;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int CompareTo(IPv4Address other) => OperatorHelper.Compare(this, other);
+    public int CompareTo(IPv4Address other) => _value.CompareTo(other._value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator <(IPv4Address left, IPv4Address right) => OperatorHelper.LessThan(left, right);
+    public static bool operator <(IPv4Address left, IPv4Address right) => left._value < right._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator >(IPv4Address left, IPv4Address right) => OperatorHelper.GreaterThan(left, right);
+    public static bool operator >(IPv4Address left, IPv4Address right) => left._value > right._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator <=(IPv4Address left, IPv4Address right) => OperatorHelper.LessThanOrEqual(left, right);
+    public static bool operator <=(IPv4Address left, IPv4Address right) => left._value <= right._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator >=(IPv4Address left, IPv4Address right) => OperatorHelper.GreaterThanOrEqual(left, right);
+    public static bool operator >=(IPv4Address left, IPv4Address right) => left._value >= right._value;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IPv4Address operator ~(IPv4Address value) => OperatorHelper.Not(value);
+    public static IPv4Address operator ~(IPv4Address value) => new(~value._value);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IPv4Address operator &(IPv4Address left, IPv4Address right) => OperatorHelper.And(left, right);
+    public static IPv4Address operator &(IPv4Address left, IPv4Address right) => new(left._value & right._value);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IPv4Address operator |(IPv4Address left, IPv4Address right) => OperatorHelper.Or(left, right);
+    public static IPv4Address operator |(IPv4Address left, IPv4Address right) => new(left._value | right._value);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IPv4Address operator ^(IPv4Address left, IPv4Address right) => OperatorHelper.Xor(left, right);
+    public static IPv4Address operator ^(IPv4Address left, IPv4Address right) => new(left._value ^ right._value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString() => FormattingHelper.ToString(this, MaxStringLength);

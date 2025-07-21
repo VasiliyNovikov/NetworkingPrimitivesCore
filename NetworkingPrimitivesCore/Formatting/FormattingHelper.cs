@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetworkingPrimitivesCore.Formatting;
 
-public static class FormattingHelper
+internal static class FormattingHelper
 {
     [SkipLocalsInit]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

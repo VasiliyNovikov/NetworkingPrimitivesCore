@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 namespace NetworkingPrimitivesCore.Formatting;
 
 [method: MethodImpl(MethodImplOptions.AggressiveInlining)]
-public ref struct SpanWriter<TChar>(Span<TChar> destination)
+internal ref struct SpanWriter<TChar>(Span<TChar> destination)
     where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
 {
     private readonly Span<TChar> _destination = destination;

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace NetworkingPrimitivesCore.Formatting;
 
 [method: MethodImpl(MethodImplOptions.AggressiveInlining)]
-public ref struct SpanReader<TChar>(ReadOnlySpan<TChar> source)
+internal ref struct SpanReader<TChar>(ReadOnlySpan<TChar> source)
     where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
 {
     private readonly ReadOnlySpan<TChar> _source = source;

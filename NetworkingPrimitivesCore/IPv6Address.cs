@@ -9,7 +9,6 @@ using NetworkingPrimitivesCore.Formatting;
 using NetworkingPrimitivesCore.Json;
 
 using NetUInt128 = NetworkingPrimitivesCore.NetInt<System.UInt128>;
-using OperatorHelper = NetworkingPrimitivesCore.NetIntConvertibleOperatorHelper<NetworkingPrimitivesCore.IPv6Address, System.UInt128>;
 
 namespace NetworkingPrimitivesCore;
 
@@ -86,42 +85,42 @@ public readonly struct IPv6Address : IIPAddress<IPv6Address, UInt128>
     public IPv4Address MapToIPv4() => new(Bytes.Slice(12, 4));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator UInt128(IPv6Address value) => OperatorHelper.ToInt(value);
+    public static explicit operator UInt128(IPv6Address value) => (UInt128)value._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator IPv6Address(UInt128 value) => OperatorHelper.FromInt(value);
+    public static explicit operator IPv6Address(UInt128 value) => new((NetUInt128)value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override int GetHashCode() => OperatorHelper.GetHashCode(this);
+    public override int GetHashCode() => _value.GetHashCode();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Equals(IPv6Address other) => OperatorHelper.Equal(this, other);
+    public bool Equals(IPv6Address other) => _value.Equals(other._value);
     public override bool Equals(object? obj) => obj is IPv6Address other && this == other;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(IPv6Address left, IPv6Address right) => OperatorHelper.Equal(left, right);
+    public static bool operator ==(IPv6Address left, IPv6Address right) => left._value == right._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(IPv6Address left, IPv6Address right) => OperatorHelper.NotEqual(left, right);
+    public static bool operator !=(IPv6Address left, IPv6Address right) => left._value != right._value;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int CompareTo(IPv6Address other) => OperatorHelper.Compare(this, other);
+    public int CompareTo(IPv6Address other) => _value.CompareTo(other._value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator <(IPv6Address left, IPv6Address right) => OperatorHelper.LessThan(left, right);
+    public static bool operator <(IPv6Address left, IPv6Address right) => left._value < right._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator >(IPv6Address left, IPv6Address right) => OperatorHelper.GreaterThan(left, right);
+    public static bool operator >(IPv6Address left, IPv6Address right) => left._value > right._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator <=(IPv6Address left, IPv6Address right) => OperatorHelper.LessThanOrEqual(left, right);
+    public static bool operator <=(IPv6Address left, IPv6Address right) => left._value <= right._value;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator >=(IPv6Address left, IPv6Address right) => OperatorHelper.GreaterThanOrEqual(left, right);
+    public static bool operator >=(IPv6Address left, IPv6Address right) => left._value >= right._value;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IPv6Address operator ~(IPv6Address value) => OperatorHelper.Not(value);
+    public static IPv6Address operator ~(IPv6Address value) => new(~value._value);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IPv6Address operator &(IPv6Address left, IPv6Address right) => OperatorHelper.And(left, right);
+    public static IPv6Address operator &(IPv6Address left, IPv6Address right) => new(left._value & right._value);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IPv6Address operator |(IPv6Address left, IPv6Address right) => OperatorHelper.Or(left, right);
+    public static IPv6Address operator |(IPv6Address left, IPv6Address right) => new(left._value | right._value);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IPv6Address operator ^(IPv6Address left, IPv6Address right) => OperatorHelper.Xor(left, right);
+    public static IPv6Address operator ^(IPv6Address left, IPv6Address right) => new(left._value ^ right._value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString() => FormattingHelper.ToString(this, MaxStringLength);
