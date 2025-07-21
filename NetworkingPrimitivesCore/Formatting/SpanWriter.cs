@@ -32,12 +32,7 @@ internal ref struct SpanWriter<TChar>(Span<TChar> destination)
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryWrite(char value)
-    {
-        return typeof(TChar) == typeof(char)
-            ? TryWriteCore((TChar)(object)value)
-            : TryWriteCore(TChar.CreateTruncating(value));
-    }
+    public bool TryWrite(char value) => TryWriteCore(TChar.CreateTruncating(value));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryWrite(ReadOnlySpan<char> value)
