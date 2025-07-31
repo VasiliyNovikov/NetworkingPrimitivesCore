@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace NetworkingPrimitivesCore;
 
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Sequential, Pack = 4)]
 internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     where TAddress : unmanaged, IIPAddress<TAddress, TUInt>, INetIntConvertible<TAddress, TUInt>
     where TUInt : unmanaged, IBinaryInteger<TUInt>, IUnsignedNumber<TUInt>

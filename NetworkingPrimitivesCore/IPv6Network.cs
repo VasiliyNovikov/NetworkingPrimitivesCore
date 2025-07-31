@@ -159,10 +159,10 @@ public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IPv4Network Parse(ReadOnlySpan<char> source) => FormattingHelper.Parse<IPv4Network>(source);
+    public static IPv6Network Parse(ReadOnlySpan<char> source) => FormattingHelper.Parse<IPv6Network>(source);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IPv4Network Parse(string source) => FormattingHelper.Parse<IPv4Network>(source);
+    public static IPv6Network Parse(string source) => FormattingHelper.Parse<IPv6Network>(source);
 
     #region ISpanFormattable, IFormattable implementations
 

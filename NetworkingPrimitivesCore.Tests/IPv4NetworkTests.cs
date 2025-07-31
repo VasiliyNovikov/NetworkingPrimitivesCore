@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NetworkingPrimitivesCore.Tests;
 
 [TestClass]
-public class IPNetworkTests
+public class IPv4NetworkTests
 {
+    [TestMethod]
+    public void IPv4Network_Size_Test() => Assert.AreEqual(12, Unsafe.SizeOf<IPv4Network>());
+
     private static IEnumerable<object[]> IPv4Network_Parse_Test_Data() =>
     [
        ["10.10.128.0/22", "10.10.128.0", 22, "255.255.252.0"],
@@ -18,7 +22,7 @@ public class IPNetworkTests
 
     [TestMethod]
     [DynamicData(nameof(IPv4Network_Parse_Test_Data), DynamicDataSourceType.Method)]
-    public void IPNetwork_Parse_Test(string networkString, string addressString, int prefix, string mask)
+    public void IPv4Network_Parse_Test(string networkString, string addressString, int prefix, string mask)
     {
         var network = IPv4Network.Parse(networkString);
         Assert.AreEqual(IPv4Address.Parse(addressString), network.Address);
