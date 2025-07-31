@@ -12,8 +12,8 @@ using NetworkingPrimitivesCore.Json;
 
 namespace NetworkingPrimitivesCore;
 
-[JsonConverter(typeof(JsonNetAddressConverter<IPAnyAddress>))]
-[TypeConverter(typeof(NetAddressConverter<IPAnyAddress>))]
+[JsonConverter(typeof(JsonNetPrimitiveConverter<IPAnyAddress>))]
+[TypeConverter(typeof(NetPrimitiveTypeConverter<IPAnyAddress>))]
 [StructLayout(LayoutKind.Explicit, Pack = 1)]
 public readonly struct IPAnyAddress
     : IIPAddressBase<IPAnyAddress>

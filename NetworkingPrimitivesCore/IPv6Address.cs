@@ -12,8 +12,8 @@ using NetUInt128 = NetworkingPrimitivesCore.NetInt<System.UInt128>;
 
 namespace NetworkingPrimitivesCore;
 
-[JsonConverter(typeof(JsonNetAddressConverter<IPv6Address>))]
-[TypeConverter(typeof(NetAddressConverter<IPv6Address>))]
+[JsonConverter(typeof(JsonNetPrimitiveConverter<IPv6Address>))]
+[TypeConverter(typeof(NetPrimitiveTypeConverter<IPv6Address>))]
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct IPv6Address : IIPAddress<IPv6Address, UInt128>
 {

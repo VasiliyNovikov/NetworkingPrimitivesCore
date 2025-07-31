@@ -12,8 +12,8 @@ using NetUInt32 = NetworkingPrimitivesCore.NetInt<uint>;
 
 namespace NetworkingPrimitivesCore;
 
-[JsonConverter(typeof(JsonNetAddressConverter<IPv4Address>))]
-[TypeConverter(typeof(NetAddressConverter<IPv4Address>))]
+[JsonConverter(typeof(JsonNetPrimitiveConverter<IPv4Address>))]
+[TypeConverter(typeof(NetPrimitiveTypeConverter<IPv4Address>))]
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct IPv4Address : IIPAddress<IPv4Address, uint>
 {

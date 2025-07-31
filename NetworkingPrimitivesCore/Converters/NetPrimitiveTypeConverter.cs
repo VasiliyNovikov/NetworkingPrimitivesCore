@@ -7,11 +7,9 @@ using NetworkingPrimitivesCore.Formatting;
 
 namespace NetworkingPrimitivesCore.Converters;
 
-internal abstract class SpanTypeConverter<T> : TypeConverter
-    where T : ISpanFormattable, ISpanParsable<T>
+internal sealed class NetPrimitiveTypeConverter<T> : TypeConverter
+    where T : unmanaged, INetPrimitive<T>
 {
-    protected abstract int MaxStringLength { get; }
-
     public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType) => sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
 
     public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
@@ -26,7 +24,7 @@ internal abstract class SpanTypeConverter<T> : TypeConverter
     public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
     {
         return destinationType == typeof(string) && value is T typedValue
-            ? FormattingHelper.ToString(typedValue, MaxStringLength, null, culture)
+            ? FormattingHelper.ToString(typedValue, T.MaxStringLength, null, culture)
             : base.ConvertTo(context, culture, value, destinationType);
     }
 }

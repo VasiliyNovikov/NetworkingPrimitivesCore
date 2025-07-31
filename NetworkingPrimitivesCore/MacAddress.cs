@@ -12,8 +12,8 @@ using NetUInt48 = NetworkingPrimitivesCore.NetInt<NetworkingPrimitivesCore.UInt4
 
 namespace NetworkingPrimitivesCore;
 
-[JsonConverter(typeof(JsonNetAddressConverter<MacAddress>))]
-[TypeConverter(typeof(NetAddressConverter<MacAddress>))]
+[JsonConverter(typeof(JsonNetPrimitiveConverter<MacAddress>))]
+[TypeConverter(typeof(NetPrimitiveTypeConverter<MacAddress>))]
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
 {
