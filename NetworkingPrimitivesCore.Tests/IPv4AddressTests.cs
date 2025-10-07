@@ -18,7 +18,7 @@ public class IPv4AddressTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(Test_IPAddresses), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(Test_IPAddresses))]
     public void IPv4Address_Parse_Format_Test(string address)
     {
         var fwAddress = IPAddress.Parse(address);

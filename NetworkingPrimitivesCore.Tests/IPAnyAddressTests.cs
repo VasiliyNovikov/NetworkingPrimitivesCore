@@ -26,7 +26,7 @@ public class IPAnyAddressTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(Test_IPAddresses), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(Test_IPAddresses))]
     public void IPAnyAddress_Parse_Format_Test(string address)
     {
         var fwAddress = IPAddress.Parse(address);

@@ -21,7 +21,7 @@ public class IPv6NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv6Network_Parse_Test_Data), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(IPv6Network_Parse_Test_Data))]
     public void IPv6Network_Parse_Test(string networkString, string addressString, int prefix, string mask)
     {
         var network = IPv6Network.Parse(networkString);
@@ -40,11 +40,10 @@ public class IPv6NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv6Network_Parse_Failure_Test_Data), DynamicDataSourceType.Method)]
-    [ExpectedException(typeof(FormatException), AllowDerivedTypes = true)]
+    [DynamicData(nameof(IPv6Network_Parse_Failure_Test_Data))]
     public void IPv6Network_Parse_Failure_Test(string networkString)
     {
-        IPv6Network.Parse(networkString);
+        Assert.ThrowsExactly<FormatException>(() => IPv6Network.Parse(networkString));
     }
 
     private static IEnumerable<object[]> IPv6Network_Contains_Test_Data() =>
@@ -54,7 +53,7 @@ public class IPv6NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv6Network_Contains_Test_Data), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(IPv6Network_Contains_Test_Data))]
     public void IPv6Network_Contains_Test(string networkString, string addressString, bool contains)
     {
         var network = IPv6Network.Parse(networkString);
@@ -69,7 +68,7 @@ public class IPv6NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv6Network_Indexer_Test_Data), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(IPv6Network_Indexer_Test_Data))]
     public void IPv6Network_Indexer_Test(string networkString, uint index, string addressString)
     {
         var network = IPv6Network.Parse(networkString);
@@ -82,7 +81,7 @@ public class IPv6NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv6Network_Subnet_Test_Data), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(IPv6Network_Subnet_Test_Data))]
     public void IPv6Network_Subnet_Test(string networkString, int prefix, int index, string subnetString)
     {
         var network = IPv6Network.Parse(networkString);
@@ -96,7 +95,7 @@ public class IPv6NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv6Network_Supernet_Test_Data), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(IPv6Network_Supernet_Test_Data))]
     public void IPv6Network_Supernet_Test(string networkString, int prefix, string supernetString)
     {
         var network = IPv6Network.Parse(networkString);
@@ -112,7 +111,7 @@ public class IPv6NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv6Network_ToString_Test_Data), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(IPv6Network_ToString_Test_Data))]
     public void IPv6Network_ToString_Test(string networkString)
     {
         var network = IPv6Network.Parse(networkString);

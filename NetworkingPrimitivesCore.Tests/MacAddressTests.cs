@@ -17,7 +17,7 @@ public class MacAddressTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(Test_Format_MacAddresses), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(Test_Format_MacAddresses))]
     public void MacAddress_Format_Test(string addressString, byte[] addressBytes)
     {
         var macAddress = new MacAddress(addressBytes);
@@ -47,7 +47,7 @@ public class MacAddressTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(Test_Parse_MacAddresses), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(Test_Parse_MacAddresses))]
     public void MacAddress_Parse_Test(string addressString, string? normalizedAddressString)
     {
         var isValid = normalizedAddressString != null;
@@ -56,7 +56,7 @@ public class MacAddressTests
             Assert.AreEqual(normalizedAddressString, address.ToString());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, DisplayName = "Newtonsoft.Json")]
     [DataRow(true, DisplayName = "System.Text.Json")]
     public void MacAddress_Serialization_Test(bool useNewSerializer)

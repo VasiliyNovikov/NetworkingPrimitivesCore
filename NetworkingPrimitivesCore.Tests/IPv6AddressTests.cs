@@ -24,7 +24,7 @@ public class IPv6AddressTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(Test_IPAddresses), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(Test_IPAddresses))]
     public void IPv6Address_Parse_Format_Test(string address)
     {
         var fwAddress = IPAddress.Parse(address);

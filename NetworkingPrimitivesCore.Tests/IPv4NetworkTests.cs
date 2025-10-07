@@ -21,7 +21,7 @@ public class IPv4NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv4Network_Parse_Test_Data), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(IPv4Network_Parse_Test_Data))]
     public void IPv4Network_Parse_Test(string networkString, string addressString, int prefix, string mask)
     {
         var network = IPv4Network.Parse(networkString);
@@ -41,11 +41,10 @@ public class IPv4NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv4Network_Parse_Failure_Test_Data), DynamicDataSourceType.Method)]
-    [ExpectedException(typeof(FormatException), AllowDerivedTypes = true)]
+    [DynamicData(nameof(IPv4Network_Parse_Failure_Test_Data))]
     public void IPv4Network_Parse_Failure_Test(string networkString)
     {
-        IPv4Network.Parse(networkString);
+        Assert.ThrowsExactly<FormatException>(() => IPv4Network.Parse(networkString));
     }
 
     private static IEnumerable<object[]> IPv4Network_Contains_Test_Data() =>
@@ -55,7 +54,7 @@ public class IPv4NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv4Network_Contains_Test_Data), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(IPv4Network_Contains_Test_Data))]
     public void IPv4Network_Contains_Test(string networkString, string addressString, bool contains)
     {
         var network = IPv4Network.Parse(networkString);
@@ -70,7 +69,7 @@ public class IPv4NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv4Network_Indexer_Test_Data), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(IPv4Network_Indexer_Test_Data))]
     public void IPv4Network_Indexer_Test(string networkString, uint index, string addressString)
     {
         var network = IPv4Network.Parse(networkString);
@@ -84,7 +83,7 @@ public class IPv4NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv4Network_Subnet_Test_Data), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(IPv4Network_Subnet_Test_Data))]
     public void IPv4Network_Subnet_Test(string networkString, int prefix, int index, string subnetString)
     {
         var network = IPv4Network.Parse(networkString);
@@ -99,7 +98,7 @@ public class IPv4NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv4Network_Supernet_Test_Data), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(IPv4Network_Supernet_Test_Data))]
     public void IPv4Network_Supernet_Test(string networkString, int prefix, string supernetString)
     {
         var network = IPv4Network.Parse(networkString);
@@ -115,7 +114,7 @@ public class IPv4NetworkTests
     ];
 
     [TestMethod]
-    [DynamicData(nameof(IPv4Network_ToString_Test_Data), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(IPv4Network_ToString_Test_Data))]
     public void IPv4Network_ToString_Test(string networkString)
     {
         var network = IPv4Network.Parse(networkString);
