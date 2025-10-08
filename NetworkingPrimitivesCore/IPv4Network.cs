@@ -67,7 +67,7 @@ public readonly struct IPv4Network : IIPNetwork<IPv4Network, NetAddress, uint>
     private IPv4Network(IPNetworkImplementation implementation) => _implementation = implementation;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPv4Network(NetAddress address, byte? prefix = null) : this(new(address, prefix)) { }
+    public IPv4Network(NetAddress address, byte? prefix = null, bool strict = true) : this(new(address, prefix, strict)) { }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Contains(NetAddress address) => _implementation.Contains(address);

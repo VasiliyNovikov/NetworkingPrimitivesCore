@@ -67,7 +67,7 @@ public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128
     private IPv6Network(IPNetworkImplementation implementation) => _implementation = implementation;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPv6Network(NetAddress address, byte? prefix = null) : this(new(address, prefix)) { }
+    public IPv6Network(NetAddress address, byte? prefix = null, bool strict = true) : this(new(address, prefix, strict)) { }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Contains(NetAddress address) => _implementation.Contains(address);
@@ -94,6 +94,12 @@ public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128
     }
 
     public NetAddress this[ulong index]
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => AddressAt(index);
+    }
+
+    public NetAddress this[Int128 index]
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => AddressAt(index);

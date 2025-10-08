@@ -14,7 +14,7 @@ namespace NetworkingPrimitivesCore;
 
 [JsonConverter(typeof(JsonNetPrimitiveConverter<IPAnyAddress>))]
 [TypeConverter(typeof(NetPrimitiveTypeConverter<IPAnyAddress>))]
-[StructLayout(LayoutKind.Explicit, Pack = 1)]
+[StructLayout(LayoutKind.Explicit, Pack = 4)]
 public readonly struct IPAnyAddress
     : IIPAddressBase<IPAnyAddress>
     , INetIntConvertible<IPAnyAddress, uint>
