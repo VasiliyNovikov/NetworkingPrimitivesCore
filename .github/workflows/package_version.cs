@@ -1,5 +1,4 @@
-#pragma warning disable IL2026
-#pragma warning disable IL3050
+#:property PublishAot=false
 #:package NuGet.Versioning
 
 using System.Text.Json;
