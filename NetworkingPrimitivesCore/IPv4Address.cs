@@ -106,7 +106,7 @@ public readonly struct IPv4Address : IIPAddress<IPv4Address, uint>
     public static IPv4Address operator ^(IPv4Address left, IPv4Address right) => new(left._value ^ right._value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override string ToString() => FormattingHelper.ToString(this, MaxStringLength);
+    public override string ToString() => this.ToString(MaxStringLength);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Format(Span<char> destination) => FormattingHelper.Format(this, destination);

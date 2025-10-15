@@ -124,7 +124,7 @@ public readonly struct IPv6Address : IIPAddress<IPv6Address, UInt128>
     public static IPv6Address operator ^(IPv6Address left, IPv6Address right) => new(left._value ^ right._value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override string ToString() => FormattingHelper.ToString(this, MaxStringLength);
+    public override string ToString() => this.ToString(MaxStringLength);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Format(Span<char> destination) => FormattingHelper.Format(this, destination);

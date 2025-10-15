@@ -191,7 +191,7 @@ public readonly struct IPAnyAddress
     public static bool operator >=(IPAnyAddress a, IPAnyAddress b) => a.CompareTo(b) >= 0;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override string ToString() => FormattingHelper.ToString(this, MaxStringLength);
+    public override string ToString() => this.ToString(MaxStringLength);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Format(Span<char> destination) => FormattingHelper.Format(this, destination);

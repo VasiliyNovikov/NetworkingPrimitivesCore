@@ -180,9 +180,9 @@ public readonly struct IPNetwork : IIPNetworkBase<IPNetwork, IPAnyAddress>
     public int CompareTo(IPNetwork other)
     {
         return _isV6 == other._isV6
-            ? (_isV6
-                   ? _ipv6Network.CompareTo(other._ipv6Network)
-                   : _ipv4Network.CompareTo(other._ipv4Network))
+            ? _isV6
+                ? _ipv6Network.CompareTo(other._ipv6Network)
+                : _ipv4Network.CompareTo(other._ipv4Network)
             : _isV6.CompareTo(other._isV6);
     }
 
@@ -196,7 +196,7 @@ public readonly struct IPNetwork : IIPNetworkBase<IPNetwork, IPAnyAddress>
     public static bool operator >=(IPNetwork a, IPNetwork b) => a.CompareTo(b) >= 0;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override string ToString() => FormattingHelper.ToString(this, MaxStringLength);
+    public override string ToString() => this.ToString(MaxStringLength);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Format(Span<char> destination) => FormattingHelper.Format(this, destination);

@@ -46,7 +46,7 @@ internal static class MacAddressFormatter<TChar>
         if (format.Length > 1)
             throw new FormatException($"The {format} format string is not supported");
 
-        char formatChar = format.IsEmpty ? 'n' : format[0];
+        var formatChar = format.IsEmpty ? 'n' : format[0];
         TChar separator;
         bool isUpper;
         switch (formatChar)
@@ -73,7 +73,7 @@ internal static class MacAddressFormatter<TChar>
         }
 
         var writer = new SpanWriter<TChar>(destination);
-        bool result = true;
+        var result = true;
         for (var i = 0; i < macAddressBytes.Length; ++i)
         {
             var component = macAddressBytes[i];

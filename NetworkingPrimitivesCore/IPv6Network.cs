@@ -144,7 +144,7 @@ public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128
     public static bool operator >=(IPv6Network a, IPv6Network b) => a.CompareTo(b) >= 0;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override string ToString() => FormattingHelper.ToString(this, MaxStringLength);
+    public override string ToString() => this.ToString(MaxStringLength);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Format(Span<char> destination) => FormattingHelper.Format(this, destination);

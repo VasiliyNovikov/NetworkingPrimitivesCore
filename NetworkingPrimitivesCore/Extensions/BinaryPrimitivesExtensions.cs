@@ -13,8 +13,8 @@ public static class BinaryPrimitivesExtensions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UInt48 ReverseEndianness(UInt48 value)
         {
-            ulong ulongValue = (ulong)value;
-            ulong reversedValue = BinaryPrimitives.ReverseEndianness(ulongValue);
+            var ulongValue = (ulong)value;
+            var reversedValue = BinaryPrimitives.ReverseEndianness(ulongValue);
             return (UInt48)(reversedValue >> 16);
         }
 
