@@ -20,7 +20,7 @@ internal static class IPv6AddressFormatter<TChar>
         // Precompute Zero Sequences
         for (var m = 0; m < 256; ++m)
         {
-            byte mask = (byte)m;
+            var mask = (byte)m;
             // Find longest 0 sequence
             byte zeroSequenceStart = 255;
             byte zeroSequenceLength = 1;
@@ -34,7 +34,7 @@ internal static class IPv6AddressFormatter<TChar>
                 }
 
                 byte length = 1;
-                for (byte j = (byte)(i + 1); j < 8; ++j)
+                for (var j = (byte)(i + 1); j < 8; ++j)
                 {
                     if ((mask & (byte)(1 << j)) != 0)
                         break;
@@ -99,7 +99,7 @@ internal static class IPv6AddressFormatter<TChar>
         }
 
         var reader = new SpanReader<TChar>(source);
-        Span<NetInt<ushort>> ipAddressSegments = MemoryMarshal.Cast<byte, NetInt<ushort>>(ipAddressBytes);
+        var ipAddressSegments = MemoryMarshal.Cast<byte, NetInt<ushort>>(ipAddressBytes);
         var count = 0;
         var zeroSequenceStart = -1;
         var maxSegmentCount = Unsafe.SizeOf<IPv6Address>() / 2;
@@ -113,15 +113,15 @@ internal static class IPv6AddressFormatter<TChar>
                     ++separatorCount;
             }
 
-            if (separatorCount == 2)
+            switch (separatorCount)
             {
-                if (zeroSequenceStart >= 0)
+                case 1 when count == 0:
+                case 2 when zeroSequenceStart >= 0:
                     return false;
-                zeroSequenceStart = count;
+                case 2:
+                    zeroSequenceStart = count;
+                    break;
             }
-            else if (separatorCount == 1 && count == 0)
-                return false;
-
 
             if (!TryReadSegment(ref reader, out ipAddressSegments[count]))
             {

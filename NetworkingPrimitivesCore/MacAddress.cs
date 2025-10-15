@@ -85,7 +85,7 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     public override string ToString() => ToString(null);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public string ToString(string? format) => FormattingHelper.ToString(this, MaxStringLength, format);
+    public string ToString(string? format) => this.ToString(MaxStringLength, format);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Format(Span<char> destination, ReadOnlySpan<char> format = default) => FormattingHelper.Format(this, destination, format);

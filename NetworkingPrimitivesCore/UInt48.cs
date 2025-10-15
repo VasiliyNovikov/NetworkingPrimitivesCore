@@ -14,8 +14,6 @@ public readonly struct UInt48
     : IBinaryInteger<UInt48>
     , IUnsignedNumber<UInt48>
     , IMinMaxValue<UInt48>
-    , IEquatable<UInt48>
-    , IComparable<UInt48>
 {
     [InlineArray(3)]
     private struct Data { private ushort _value0; }
@@ -38,7 +36,7 @@ public readonly struct UInt48
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private UInt48(ulong value) => _data = Unsafe.As<ulong, Data>(ref Unsafe.AsRef(in value));
 
-    public static UInt48 One { get; } = new UInt48(1);
+    public static UInt48 One { get; } = new(1);
 
     public static int Radix { get; } = 2;
 
@@ -192,9 +190,9 @@ public readonly struct UInt48
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out UInt48 result)
     {
-        if (ulong.TryParse(s, style, provider, out ulong value) && value <= UlongMaxValue)
+        if (ulong.TryParse(s, style, provider, out var value) && value <= UlongMaxValue)
         {
-            result = new UInt48(value);
+            result = new(value);
             return true;
         }
         result = default;
@@ -221,19 +219,14 @@ public readonly struct UInt48
             return true;
         }
 
-        if (!isUnsigned && sbyte.IsNegative((sbyte)source[0]))
+        if (!isUnsigned && sbyte.IsNegative((sbyte)source[0]) ||
+            source.Length > Unsafe.SizeOf<UInt48>() && source[..^Unsafe.SizeOf<UInt48>()].ContainsAnyExcept((byte)0x00))
         {
             value = default;
             return false;
         }
 
-        if ((source.Length > Unsafe.SizeOf<UInt48>()) && source[..^Unsafe.SizeOf<UInt48>()].ContainsAnyExcept((byte)0x00))
-        {
-            value = default;
-            return false;
-        }
-
-        ref byte sourceRef = ref MemoryMarshal.GetReference(source);
+        ref var sourceRef = ref MemoryMarshal.GetReference(source);
 
         if (source.Length >= Unsafe.SizeOf<UInt48>())
         {
@@ -246,7 +239,7 @@ public readonly struct UInt48
         else
         {
             ulong ulongResult = 0;
-            for (int i = 0; i < source.Length; i++)
+            for (var i = 0; i < source.Length; i++)
             {
                 ulongResult <<= 8;
                 ulongResult |= Unsafe.Add(ref sourceRef, i);
@@ -266,19 +259,14 @@ public readonly struct UInt48
             return true;
         }
 
-        if (!isUnsigned && sbyte.IsNegative((sbyte)source[^1]))
+        if (!isUnsigned && sbyte.IsNegative((sbyte)source[^1]) ||
+            source.Length > Unsafe.SizeOf<UInt48>() && source[Unsafe.SizeOf<UInt48>()..].ContainsAnyExcept((byte)0x00))
         {
             value = default;
             return false;
         }
 
-        if ((source.Length > Unsafe.SizeOf<UInt48>()) && source[Unsafe.SizeOf<UInt48>()..].ContainsAnyExcept((byte)0x00))
-        {
-            value = default;
-            return false;
-        }
-
-        ref byte sourceRef = ref MemoryMarshal.GetReference(source);
+        ref var sourceRef = ref MemoryMarshal.GetReference(source);
 
         if (source.Length >= Unsafe.SizeOf<UInt48>())
         {
@@ -290,7 +278,7 @@ public readonly struct UInt48
         else
         {
             ulong ulongResult = 0;
-            for (int i = 0; i < source.Length; i++)
+            for (var i = 0; i < source.Length; i++)
             {
                 ulong part = Unsafe.Add(ref sourceRef, i);
                 part <<= i * 8;
@@ -320,7 +308,7 @@ public readonly struct UInt48
     public int GetByteCount() => Unsafe.SizeOf<UInt48>();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int GetShortestBitLength() => (sizeof(ulong) * 8) - BitOperations.LeadingZeroCount(Value);
+    public int GetShortestBitLength() => sizeof(ulong) * 8 - BitOperations.LeadingZeroCount(Value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
@@ -341,11 +329,8 @@ public readonly struct UInt48
             bytesWritten = Unsafe.SizeOf<UInt48>();
             return true;
         }
-        else
-        {
-            bytesWritten = 0;
-            return false;
-        }
+        bytesWritten = 0;
+        return false;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -358,11 +343,8 @@ public readonly struct UInt48
             bytesWritten = Unsafe.SizeOf<UInt48>();
             return true;
         }
-        else
-        {
-            bytesWritten = 0;
-            return false;
-        }
+        bytesWritten = 0;
+        return false;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

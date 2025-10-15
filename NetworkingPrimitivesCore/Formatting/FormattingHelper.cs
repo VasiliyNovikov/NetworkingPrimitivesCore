@@ -34,7 +34,7 @@ internal static class FormattingHelper
         where T : unmanaged, ISpanFormattable, IUtf8SpanFormattable
         where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
     {
-        return value.TryFormat(destination, out int charsWritten, format, provider)
+        return value.TryFormat(destination, out var charsWritten, format, provider)
             ? charsWritten
             : throw new FormatException($"The value of type {typeof(T)} could not be formatted with the format '{format}' and provider '{provider}'.");
     }
