@@ -9,12 +9,14 @@ namespace NetworkingPrimitivesCore.Formatting;
 internal ref struct SpanReader<TChar>(ReadOnlySpan<TChar> source)
     where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
 {
-    private static readonly byte[] HexLookup;
+    [InlineArray(256)]
+    private struct ByteArray256 { private byte _e0; }
+
+    private static readonly ByteArray256 HexLookup;
 
     static SpanReader()
     {
-        HexLookup = new byte[256];
-        Array.Fill(HexLookup, byte.MaxValue);
+        ((Span<byte>)HexLookup).Fill(byte.MaxValue);
         for (byte i = 0; i < 10; ++i)
             HexLookup['0' + i] = i;
         for (byte i = 0; i < 6; ++i)
@@ -106,7 +108,7 @@ internal ref struct SpanReader<TChar>(ReadOnlySpan<TChar> source)
             return false;
         }
 
-        value = HexLookup[intCh];
+        value = HexLookup[(int)intCh];
         if (value == byte.MaxValue)
         {
             Unsafe.SkipInit(out value);

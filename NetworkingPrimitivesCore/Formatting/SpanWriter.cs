@@ -9,6 +9,23 @@ namespace NetworkingPrimitivesCore.Formatting;
 internal ref struct SpanWriter<TChar>(Span<TChar> destination)
     where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
 {
+    [InlineArray(16)]
+    private struct CharArray16 { private TChar _e0; }
+
+    private static readonly CharArray16 LowerHexLookup;
+    private static readonly CharArray16 UpperHexLookup;
+
+    static SpanWriter()
+    {
+        for (byte i = 0; i < 10; ++i)
+            LowerHexLookup[i] = UpperHexLookup[i] = TChar.CreateTruncating('0' + i);
+        for (byte i = 0; i < 6; ++i)
+        {
+            LowerHexLookup[10 + i] = TChar.CreateTruncating('a' + i);
+            UpperHexLookup[10 + i] = TChar.CreateTruncating('A' + i);
+        }
+    }
+
     private readonly Span<TChar> _destination = destination;
 
     public int Position
@@ -33,9 +50,9 @@ internal ref struct SpanWriter<TChar>(Span<TChar> destination)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryWrite(ReadOnlySpan<TChar> value)
     {
-        if (value.Length > _destination.Length - Position)
+        if (!value.TryCopyTo(_destination[Position..]))
             return false;
-        value.CopyTo(_destination[Position..]);
+
         Position += value.Length;
         return true;
     }
@@ -44,5 +61,5 @@ internal ref struct SpanWriter<TChar>(Span<TChar> destination)
     public bool TryWriteDecimalDigit(byte digit) => TryWrite(TChar.CreateTruncating('0' + digit));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryWriteHexDigit(byte digit, bool isUpper = false) => TryWrite(TChar.CreateTruncating(digit < 10 ? '0' + digit : (isUpper ? 'A' : 'a') - 10 + digit));
+    public bool TryWriteHexDigit(byte digit, bool isUpper = false) => TryWrite(isUpper ? UpperHexLookup[digit] : LowerHexLookup[digit]);
 }
