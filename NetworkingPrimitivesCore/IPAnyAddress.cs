@@ -194,7 +194,11 @@ public readonly struct IPAnyAddress
     public override string ToString() => this.ToString(MaxStringLength);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int Format(Span<char> destination) => FormattingHelper.Format(this, destination);
+    public int Format<TChar>(Span<TChar> destination)
+        where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
+    {
+        return FormattingHelper.Format(this, destination);
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryFormat<TChar>(Span<TChar> destination, out int charsWritten)

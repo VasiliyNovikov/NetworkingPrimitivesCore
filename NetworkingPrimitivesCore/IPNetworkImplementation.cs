@@ -141,7 +141,7 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryParse<TChar>(ReadOnlySpan<TChar> source, out IPNetworkImplementation<TAddress, TUInt> network)
+    public static bool TryParse<TChar>(ReadOnlySpan<TChar> source, bool strict, out IPNetworkImplementation<TAddress, TUInt> network)
         where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
     {
         var slashIndex = source.IndexOf(TChar.CreateTruncating('/'));
@@ -155,12 +155,17 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
             }
         }
         else if (TAddress.TryParse(source[..slashIndex], out var address) &&
-                 FormattingHelper.TryParse<byte, TChar>(source[(slashIndex + 1)..], null, out var prefix) &&
-                 TryInitialize(address, prefix, out var mask, out _) == InitializationResult.Ok)
-        {
-            network = new(address, mask, prefix);
-            return true;
-        }
+                 FormattingHelper.TryParse<byte, TChar>(source[(slashIndex + 1)..], CultureInfo.InvariantCulture, out var prefix))
+            switch (TryInitialize(address, prefix, out var mask, out _))
+            {
+                case InitializationResult.Ok:
+                    network = new(address, mask, prefix);
+                    return true;
+                case InitializationResult.InvalidHostBits when !strict:
+                    address &= mask;
+                    network = new(address, mask, prefix);
+                    return true;
+            }
 
         network = default;
         return false;
