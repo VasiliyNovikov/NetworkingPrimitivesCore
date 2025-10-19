@@ -199,7 +199,11 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
     public override string ToString() => this.ToString(MaxStringLength);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int Format(Span<char> destination) => FormattingHelper.Format(this, destination);
+    public int Format<TChar>(Span<TChar> destination)
+        where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
+    {
+        return FormattingHelper.Format(this, destination);
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryFormat<TChar>(Span<TChar> destination, out int charsWritten)
@@ -211,12 +215,12 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryParse<TChar>(ReadOnlySpan<TChar> source, out IPAnyNetwork result)
+    public static bool TryParse<TChar>(ReadOnlySpan<TChar> source, bool strict, out IPAnyNetwork result)
         where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
     {
         if (source.Contains(TChar.CreateTruncating(':')))
         {
-            if (IPv6Network.TryParse(source, out var resultV6))
+            if (IPv6Network.TryParse(source, strict, out var resultV6))
             {
                 result = resultV6;
                 return true;
@@ -224,7 +228,7 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
         }
         else
         {
-            if (IPv4Network.TryParse(source, out var resultV4))
+            if (IPv4Network.TryParse(source, strict, out var resultV4))
             {
                 result = resultV4;
                 return true;
@@ -235,17 +239,37 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryParse(string source, out IPAnyNetwork result) => TryParse<char>(source, out result);
+    public static bool TryParse<TChar>(ReadOnlySpan<TChar> source, out IPAnyNetwork result)
+        where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
+    {
+        return TryParse(source, true, out result);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool TryParse(string source, bool strict, out IPAnyNetwork result) => TryParse(source.AsSpan(), strict, out result);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool TryParse(string source, out IPAnyNetwork result) => TryParse(source, true, out result);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static IPAnyNetwork Parse<TChar>(ReadOnlySpan<TChar> source, bool strict)
+        where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
+    {
+        return FormattingHelper.Parse<IPAnyNetwork, TChar>(source, IPNetworkFormatProvider.Get(strict));
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static IPAnyNetwork Parse<TChar>(ReadOnlySpan<TChar> source)
         where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
     {
-        return FormattingHelper.Parse<IPAnyNetwork, TChar>(source);
+        return Parse(source, true);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IPAnyNetwork Parse(string source) => Parse<char>(source);
+    public static IPAnyNetwork Parse(string source, bool strict) => Parse(source.AsSpan(), strict);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static IPAnyNetwork Parse(string source) => Parse(source, true);
 
     #region ISpanFormattable, IFormattable implementations
 

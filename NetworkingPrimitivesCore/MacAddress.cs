@@ -88,7 +88,18 @@ public readonly struct MacAddress : INetAddress<MacAddress, UInt48>
     public string ToString(string? format) => this.ToString(MaxStringLength, format);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int Format(Span<char> destination, ReadOnlySpan<char> format = default) => FormattingHelper.Format(this, destination, format);
+    public int Format<TChar>(Span<TChar> destination)
+        where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
+    {
+        return FormattingHelper.Format(this, destination);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public int Format<TChar>(Span<TChar> destination, ReadOnlySpan<char> format)
+        where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
+    {
+        return FormattingHelper.Format(this, destination, format);
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryFormat<TChar>(Span<TChar> destination, out int charsWritten)

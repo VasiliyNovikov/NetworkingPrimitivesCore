@@ -19,15 +19,19 @@ public interface INetPrimitive<T>
     static abstract int MaxStringLength { get; }
 
     bool TryFormat<TChar>(Span<TChar> destination, out int charsWritten) where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>;
+    int Format<TChar>(Span<TChar> destination) where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>;
 
     static abstract bool TryParse<TChar>(ReadOnlySpan<TChar> source, out T result) where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>;
+    static abstract bool TryParse(string source, out T result);
+    static abstract T Parse<TChar>(ReadOnlySpan<TChar> source) where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>;
+    static abstract T Parse(string source);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     static bool ISpanParsable<T>.TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out T result) => T.TryParse(s, out result);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     static bool IUtf8SpanParsable<T>.TryParse(ReadOnlySpan<byte> utf8Text, IFormatProvider? provider, out T result) => T.TryParse(utf8Text, out result);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static bool IParsable<T>.TryParse(string? s, IFormatProvider? provider, out T result) => T.TryParse(s.AsSpan(), out result);
+    static bool IParsable<T>.TryParse(string? s, IFormatProvider? provider, out T result) => T.TryParse(s.AsSpan(), provider, out result);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     static T ISpanParsable<T>.Parse(ReadOnlySpan<char> s, IFormatProvider? provider) => FormattingHelper.Parse<T, char>(s, provider);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
