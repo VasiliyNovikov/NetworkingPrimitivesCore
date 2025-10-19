@@ -17,7 +17,11 @@ public interface INetAddress<T, TUInt>
     where T : unmanaged, INetAddress<T, TUInt>
     where TUInt : unmanaged, IBinaryInteger<TUInt>, IUnsignedNumber<TUInt>
 {
-    static virtual T Broadcast => (T)TUInt.AllBitsSet;
+    static virtual T Broadcast
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => (T)TUInt.AllBitsSet;
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     static abstract explicit operator TUInt(T value);
