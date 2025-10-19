@@ -57,18 +57,14 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IPNetworkImplementation(TAddress address, byte? prefix, bool strict = true)
     {
-        Address = address;
-        switch (TryInitialize(address, prefix, out Mask, out Prefix))
+        switch (TryInitialize(address, prefix, strict, out Address, out Mask, out Prefix))
         {
             case InitializationResult.Ok:
                 return;
             case InitializationResult.PrefixOutOfRange:
                 throw new ArgumentOutOfRangeException(nameof(prefix));
             case InitializationResult.InvalidHostBits:
-                if (strict)
-                    throw new ArgumentException($"{address}/{prefix} has host bits set", nameof(address));
-                Address &= Mask;
-                return;
+                throw new ArgumentException($"{address}/{prefix} has host bits set", nameof(address));
             default:
                 throw new InvalidOperationException();
         }
@@ -148,24 +144,19 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
         if (slashIndex == -1)
         {
             if (TAddress.TryParse(source, out var address) &&
-                TryInitialize(address, null, out var mask, out var prefix) == InitializationResult.Ok)
+                TryInitialize(address, null, strict, out address, out var mask, out var prefix) == InitializationResult.Ok)
             {
                 network = new(address, mask, prefix);
                 return true;
             }
         }
         else if (TAddress.TryParse(source[..slashIndex], out var address) &&
-                 FormattingHelper.TryParse<byte, TChar>(source[(slashIndex + 1)..], CultureInfo.InvariantCulture, out var prefix))
-            switch (TryInitialize(address, prefix, out var mask, out _))
-            {
-                case InitializationResult.Ok:
-                    network = new(address, mask, prefix);
-                    return true;
-                case InitializationResult.InvalidHostBits when !strict:
-                    address &= mask;
-                    network = new(address, mask, prefix);
-                    return true;
-            }
+                 FormattingHelper.TryParse<byte, TChar>(source[(slashIndex + 1)..], CultureInfo.InvariantCulture, out var prefix) &&
+                 TryInitialize(address, prefix, strict, out address, out var mask, out _) == InitializationResult.Ok)
+        {
+            network = new(address, mask, prefix);
+            return true;
+        }
 
         network = default;
         return false;
@@ -179,12 +170,13 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static InitializationResult TryInitialize(TAddress address, byte? optionalPrefix, out TAddress mask, out byte prefix)
+    private static InitializationResult TryInitialize(TAddress inputAddress, byte? inputPrefix, bool strict, out TAddress address, out TAddress mask, out byte prefix)
     {
-        prefix = optionalPrefix ?? BitSize;
+        prefix = inputPrefix ?? BitSize;
 
         if (prefix > BitSize)
         {
+            address = default;
             mask = default;
             prefix = 0;
             return InitializationResult.PrefixOutOfRange;
@@ -192,20 +184,23 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
 
         if (prefix == BitSize)
         {
+            address = inputAddress;
             mask = TAddress.Broadcast;
             return InitializationResult.Ok;
         }
 
         if (prefix == 0)
         {
+            address = default;
             mask = default;
-            return address == default
-                ? InitializationResult.Ok
-                : InitializationResult.InvalidHostBits;
+        }
+        else
+        {
+            mask = MaskCache[prefix];
+            address = inputAddress & mask;
         }
 
-        mask = MaskCache[prefix];
-        return (address & mask) == address
+        return inputAddress == address || !strict
             ? InitializationResult.Ok
             : InitializationResult.InvalidHostBits;
     }
