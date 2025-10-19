@@ -7,10 +7,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace NetworkingPrimitivesCore.Tests;
 
 [TestClass]
-public class IPNetworkTests
+public class IPAnyNetworkTests
 {
     [TestMethod]
-    public void IPNetwork_Size_Test() => Assert.AreEqual(40, Unsafe.SizeOf<IPNetwork>());
+    public void IPNetwork_Size_Test() => Assert.AreEqual(40, Unsafe.SizeOf<IPAnyNetwork>());
 
     private static IEnumerable<object[]> IPNetwork_Parse_Test_Data() =>
     [
@@ -28,7 +28,7 @@ public class IPNetworkTests
     [DynamicData(nameof(IPNetwork_Parse_Test_Data))]
     public void IPNetwork_Parse_Test(string networkString, string addressString, int prefix, string mask)
     {
-        var network = IPNetwork.Parse(networkString);
+        var network = IPAnyNetwork.Parse(networkString);
         Assert.AreEqual(IPAnyAddress.Parse(addressString), network.Address);
         Assert.AreEqual(prefix, network.Prefix);
         Assert.AreEqual(IPAnyAddress.Parse(mask), network.Mask);
@@ -52,7 +52,7 @@ public class IPNetworkTests
     [DynamicData(nameof(IPNetwork_Parse_Failure_Test_Data))]
     public void IPNetwork_Parse_Failure_Test(string networkString)
     {
-        Assert.ThrowsExactly<FormatException>(() => IPNetwork.Parse(networkString));
+        Assert.ThrowsExactly<FormatException>(() => IPAnyNetwork.Parse(networkString));
     }
 
     private static IEnumerable<object[]> IPNetwork_Contains_Test_Data() =>
@@ -67,7 +67,7 @@ public class IPNetworkTests
     [DynamicData(nameof(IPNetwork_Contains_Test_Data))]
     public void IPNetwork_Contains_Test(string networkString, string addressString, bool contains)
     {
-        var network = IPNetwork.Parse(networkString);
+        var network = IPAnyNetwork.Parse(networkString);
         var address = IPAnyAddress.Parse(addressString);
         Assert.AreEqual(contains, network.Contains(address), $"{address} is {(contains ? "" : "not ")}in the {network}");
     }
@@ -84,7 +84,7 @@ public class IPNetworkTests
     [DynamicData(nameof(IPNetwork_Indexer_Test_Data))]
     public void IPNetwork_Indexer_Test(string networkString, uint index, string addressString)
     {
-        var network = IPNetwork.Parse(networkString);
+        var network = IPAnyNetwork.Parse(networkString);
         Assert.AreEqual(addressString, network[index].ToString());
     }
 
@@ -99,7 +99,7 @@ public class IPNetworkTests
     [DynamicData(nameof(IPNetwork_Subnet_Test_Data))]
     public void IPNetwork_Subnet_Test(string networkString, int prefix, int index, string subnetString)
     {
-        var network = IPNetwork.Parse(networkString);
+        var network = IPAnyNetwork.Parse(networkString);
         var subnet = network.Subnet((byte)prefix, index);
         Assert.AreEqual(subnetString, subnet.ToString());
     }
@@ -115,7 +115,7 @@ public class IPNetworkTests
     [DynamicData(nameof(IPNetwork_Supernet_Test_Data))]
     public void IPNetwork_Supernet_Test(string networkString, int prefix, string supernetString)
     {
-        var network = IPNetwork.Parse(networkString);
+        var network = IPAnyNetwork.Parse(networkString);
         var supernet = network.Supernet((byte)prefix);
         Assert.AreEqual(supernetString, supernet.ToString());
     }
@@ -134,7 +134,7 @@ public class IPNetworkTests
     [DynamicData(nameof(IPNetwork_ToString_Test_Data))]
     public void IPNetwork_ToString_Test(string networkString)
     {
-        var network = IPNetwork.Parse(networkString);
+        var network = IPAnyNetwork.Parse(networkString);
         Assert.AreEqual(networkString, network.ToString());
     }
 }

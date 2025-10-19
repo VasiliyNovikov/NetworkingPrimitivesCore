@@ -11,10 +11,10 @@ using NetworkingPrimitivesCore.Json;
 
 namespace NetworkingPrimitivesCore;
 
-[JsonConverter(typeof(JsonNetPrimitiveConverter<IPNetwork>))]
-[TypeConverter(typeof(NetPrimitiveTypeConverter<IPNetwork>))]
+[JsonConverter(typeof(JsonNetPrimitiveConverter<IPAnyNetwork>))]
+[TypeConverter(typeof(NetPrimitiveTypeConverter<IPAnyNetwork>))]
 [StructLayout(LayoutKind.Explicit, Pack = 4)]
-public readonly struct IPNetwork : IIPNetworkBase<IPNetwork, IPAnyAddress>
+public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
 {
     public static int MaxStringLength
     {
@@ -60,7 +60,7 @@ public readonly struct IPNetwork : IIPNetworkBase<IPNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPNetwork(IPAnyAddress address, byte? prefix = null, bool strict = true)
+    public IPAnyNetwork(IPAnyAddress address, byte? prefix = null, bool strict = true)
     {
         _isV6 = address.Version == 6;
         if (_isV6)
@@ -70,21 +70,21 @@ public readonly struct IPNetwork : IIPNetworkBase<IPNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPNetwork(IPv4Network network)
+    public IPAnyNetwork(IPv4Network network)
     {
         _isV6 = false;
         _ipv4Network = network;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPNetwork(IPv6Network network)
+    public IPAnyNetwork(IPv6Network network)
     {
         _isV6 = true;
         _ipv6Network = network;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator IPv4Network(IPNetwork network)
+    public static explicit operator IPv4Network(IPAnyNetwork network)
     {
         return network._isV6
             ? throw new InvalidCastException($"Cannot cast IPv6 network {network} to IPv4 network")
@@ -92,7 +92,7 @@ public readonly struct IPNetwork : IIPNetworkBase<IPNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator IPv6Network(IPNetwork network)
+    public static explicit operator IPv6Network(IPAnyNetwork network)
     {
         return network._isV6
             ? network._ipv6Network
@@ -100,10 +100,10 @@ public readonly struct IPNetwork : IIPNetworkBase<IPNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator IPNetwork(IPv4Network network) => new(network);
+    public static implicit operator IPAnyNetwork(IPv4Network network) => new(network);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator IPNetwork(IPv6Network network) => new(network);
+    public static implicit operator IPAnyNetwork(IPv6Network network) => new(network);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Contains(IPAnyAddress address)
@@ -154,30 +154,30 @@ public readonly struct IPNetwork : IIPNetworkBase<IPNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPNetwork Subnet<TIndex>(byte prefix, TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex>
+    public IPAnyNetwork Subnet<TIndex>(byte prefix, TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex>
     {
         return _isV6 ? _ipv6Network.Subnet(prefix, index) : _ipv4Network.Subnet(prefix, index);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPNetwork Supernet(byte prefix) => _isV6 ? _ipv6Network.Supernet(prefix) : _ipv4Network.Supernet(prefix);
+    public IPAnyNetwork Supernet(byte prefix) => _isV6 ? _ipv6Network.Supernet(prefix) : _ipv4Network.Supernet(prefix);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => _isV6 ? _ipv6Network.GetHashCode() : _ipv4Network.GetHashCode();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Equals(IPNetwork other) => Address == other.Address && Mask == other.Mask;
+    public bool Equals(IPAnyNetwork other) => Address == other.Address && Mask == other.Mask;
 
-    public override bool Equals(object? obj) => obj is IPNetwork other && Equals(other);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(IPNetwork a, IPNetwork b) => a.Equals(b);
+    public override bool Equals(object? obj) => obj is IPAnyNetwork other && Equals(other);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(IPNetwork a, IPNetwork b) => !(a == b);
+    public static bool operator ==(IPAnyNetwork a, IPAnyNetwork b) => a.Equals(b);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int CompareTo(IPNetwork other)
+    public static bool operator !=(IPAnyNetwork a, IPAnyNetwork b) => !(a == b);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public int CompareTo(IPAnyNetwork other)
     {
         return _isV6 == other._isV6
             ? _isV6
@@ -187,13 +187,13 @@ public readonly struct IPNetwork : IIPNetworkBase<IPNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator <(IPNetwork a, IPNetwork b) => a.CompareTo(b) < 0;
+    public static bool operator <(IPAnyNetwork a, IPAnyNetwork b) => a.CompareTo(b) < 0;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator >(IPNetwork a, IPNetwork b) => a.CompareTo(b) > 0;
+    public static bool operator >(IPAnyNetwork a, IPAnyNetwork b) => a.CompareTo(b) > 0;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator <=(IPNetwork a, IPNetwork b) => a.CompareTo(b) <= 0;
+    public static bool operator <=(IPAnyNetwork a, IPAnyNetwork b) => a.CompareTo(b) <= 0;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator >=(IPNetwork a, IPNetwork b) => a.CompareTo(b) >= 0;
+    public static bool operator >=(IPAnyNetwork a, IPAnyNetwork b) => a.CompareTo(b) >= 0;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString() => this.ToString(MaxStringLength);
@@ -211,7 +211,7 @@ public readonly struct IPNetwork : IIPNetworkBase<IPNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryParse<TChar>(ReadOnlySpan<TChar> source, out IPNetwork result)
+    public static bool TryParse<TChar>(ReadOnlySpan<TChar> source, out IPAnyNetwork result)
         where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
     {
         if (source.Contains(TChar.CreateTruncating(':')))
@@ -235,17 +235,17 @@ public readonly struct IPNetwork : IIPNetworkBase<IPNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryParse(string source, out IPNetwork result) => TryParse<char>(source, out result);
+    public static bool TryParse(string source, out IPAnyNetwork result) => TryParse<char>(source, out result);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IPNetwork Parse<TChar>(ReadOnlySpan<TChar> source)
+    public static IPAnyNetwork Parse<TChar>(ReadOnlySpan<TChar> source)
         where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
     {
-        return FormattingHelper.Parse<IPNetwork, TChar>(source);
+        return FormattingHelper.Parse<IPAnyNetwork, TChar>(source);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IPNetwork Parse(string source) => Parse<char>(source);
+    public static IPAnyNetwork Parse(string source) => Parse<char>(source);
 
     #region ISpanFormattable, IFormattable implementations
 
