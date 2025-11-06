@@ -16,7 +16,7 @@ public readonly struct UInt48
     , IMinMaxValue<UInt48>
 {
     [InlineArray(3)]
-    private struct Data { private ushort _value0; }
+    private struct Data { private ushort _; }
 
     private const ulong UlongMaxValue = 0xFFFFFFFFFFFF;
 

@@ -11,7 +11,7 @@ namespace NetworkingPrimitivesCore;
 
 [StructLayout(LayoutKind.Sequential, Pack = 4)]
 internal readonly struct IPNetworkImplementation<TAddress, TUInt>
-    where TAddress : unmanaged, IIPAddress<TAddress, TUInt>, INetIntConvertible<TAddress, TUInt>
+    where TAddress : unmanaged, IIPAddress<TAddress, TUInt>
     where TUInt : unmanaged, IBinaryInteger<TUInt>, IUnsignedNumber<TUInt>
 {
     private static readonly TUInt[] IntMaskCache = [.. Enumerable.Range(0, BitSize + 1).Select(prefix => TUInt.AllBitsSet << (BitSize - prefix))];
