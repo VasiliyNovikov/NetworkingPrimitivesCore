@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -122,42 +121,19 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     public bool TryFormat<TChar>(Span<TChar> destination, out int charsWritten)
         where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
     {
-        if (!Address.TryFormat(destination, out charsWritten))
-            return false;
-
-        if (charsWritten == destination.Length)
-            return false;
-
-        destination[charsWritten++] = TChar.CreateTruncating('/');
-        if (!Prefix.TryFormat(destination[charsWritten..], out var prefixCharsWritten, provider: CultureInfo.InvariantCulture))
-            return false;
-
-        charsWritten += prefixCharsWritten;
-        return true;
+        return IPNetworkFormatter<TChar, TAddress, TUInt>.TryFormat(Address, Prefix, destination, out charsWritten);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool TryParse<TChar>(ReadOnlySpan<TChar> source, bool strict, out IPNetworkImplementation<TAddress, TUInt> network)
         where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
     {
-        var slashIndex = source.IndexOf(TChar.CreateTruncating('/'));
-        if (slashIndex == -1)
-        {
-            if (TAddress.TryParse(source, out var address) &&
-                TryInitialize(address, null, strict, out address, out var mask, out var prefix) == InitializationResult.Ok)
-            {
-                network = new(address, mask, prefix);
-                return true;
-            }
-        }
-        else if (TAddress.TryParse(source[..slashIndex], out var address) &&
-                 FormattingHelper.TryParse<byte, TChar>(source[(slashIndex + 1)..], CultureInfo.InvariantCulture, out var prefix) &&
-                 TryInitialize(address, prefix, strict, out address, out var mask, out _) == InitializationResult.Ok)
+        if (IPNetworkFormatter<TChar, TAddress, TUInt>.TryParse(source, out var address, out var inputPrefix) &&
+            TryInitialize(address, inputPrefix, strict, out address, out var mask, out var prefix) == InitializationResult.Ok)
         {
             network = new(address, mask, prefix);
             return true;
         }
-
         network = default;
         return false;
     }

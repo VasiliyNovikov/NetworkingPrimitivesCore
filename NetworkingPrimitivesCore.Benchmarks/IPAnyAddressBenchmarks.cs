@@ -10,6 +10,7 @@ namespace NetworkingPrimitivesCore.Benchmarks;
 [MemoryDiagnoser]
 [ShortRunJob]
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
+[HideColumns("Mean", "StdDev", "Error", "RatioSD", "Gen0", "Alloc Ratio")]
 public class IPAnyAddressBenchmarks
 {
     private static readonly string[] TestIPAddressStrings =
@@ -31,7 +32,7 @@ public class IPAnyAddressBenchmarks
         "::ffff:192.168.0.1",
         "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"
     ];
-    private static readonly IPAddress[] TestFrameworkAddresses = [.. TestIPAddressStrings.Select(IPAddress.Parse)];
+    private static readonly IPAddress[] TestIPAddresses = [.. TestIPAddressStrings.Select(IPAddress.Parse)];
     private static readonly IPAnyAddress[] TestIPAnyAddresses = [.. TestIPAddressStrings.Select(IPAnyAddress.Parse)];
 
     [Benchmark(Baseline = true)]
@@ -57,7 +58,7 @@ public class IPAnyAddressBenchmarks
     public void Format_IPAddress()
     {
         Span<char> buffer = stackalloc char[IPAnyAddress.MaxStringLength];
-        foreach (var address in TestFrameworkAddresses)
+        foreach (var address in TestIPAddresses)
             if (!address.TryFormat(buffer, out _))
                 throw new InvalidOperationException();
     }

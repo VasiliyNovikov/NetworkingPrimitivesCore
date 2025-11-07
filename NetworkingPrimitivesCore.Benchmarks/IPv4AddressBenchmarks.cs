@@ -10,6 +10,7 @@ namespace NetworkingPrimitivesCore.Benchmarks;
 [MemoryDiagnoser]
 [ShortRunJob]
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
+[HideColumns("Mean", "StdDev", "Error", "RatioSD", "Gen0", "Alloc Ratio")]
 public class IPv4AddressBenchmarks
 {
     private static readonly string[] TestIPv4AddressStrings =
