@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetworkingPrimitivesCore.Formatting;
 
-internal static class MacAddressFormatter<TChar>
+internal static class MACAddressFormatter<TChar>
     where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
