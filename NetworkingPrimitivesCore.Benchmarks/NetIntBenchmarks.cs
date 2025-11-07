@@ -1,16 +1,17 @@
 using System;
 using System.Buffers.Binary;
 using System.Linq;
-using System.Numerics;
-using System.Runtime.CompilerServices;
 
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
 
 namespace NetworkingPrimitivesCore.Benchmarks;
 
 [MemoryDiagnoser]
 [ShortRunJob]
-public class ReverseEndiannessBenchmarks
+[GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
+[HideColumns("Mean", "StdDev", "Error", "RatioSD", "Alloc Ratio")]
+public class NetIntBenchmarks
 {
     private const int TestCount = 1000;
 
@@ -19,8 +20,9 @@ public class ReverseEndiannessBenchmarks
     private static readonly ulong[] U64Values = [.. Enumerable.Range(0, TestCount).Select(_ => (ulong)Random.Shared.NextInt64())];
     private static readonly UInt128[] U128Values = [.. Enumerable.Range(0, TestCount).Select(_ => new UInt128((ulong)Random.Shared.NextInt64(), (ulong)Random.Shared.NextInt64()))];
 
-    [Benchmark]
-    public void ReverseEndianness_U16_Direct()
+    [Benchmark(Baseline = true)]
+    [BenchmarkCategory("16")]
+    public void U16_BinaryPrimitives()
     {
         foreach (var value in U16Values)
         {
@@ -32,19 +34,21 @@ public class ReverseEndiannessBenchmarks
     }
 
     [Benchmark]
-    public void ReverseEndianness_U16_Generic()
+    [BenchmarkCategory("16")]
+    public void U16_NetInt()
     {
         foreach (var value in U16Values)
         {
-            var reversed = ReverseEndianness(value);
-            var original = ReverseEndianness(reversed);
+            var reversed = (NetInt<ushort>)value;
+            var original = (ushort)reversed;
             if (value != original)
                 throw new InvalidOperationException();
         }
     }
 
-    [Benchmark]
-    public void ReverseEndianness_U32_Direct()
+    [Benchmark(Baseline = true)]
+    [BenchmarkCategory("32")]
+    public void U32_BinaryPrimitives()
     {
         foreach (var value in U32Values)
         {
@@ -56,19 +60,21 @@ public class ReverseEndiannessBenchmarks
     }
 
     [Benchmark]
-    public void ReverseEndianness_U32_Generic()
+    [BenchmarkCategory("32")]
+    public void U32_NetInt()
     {
         foreach (var value in U32Values)
         {
-            var reversed = ReverseEndianness(value);
-            var original = ReverseEndianness(reversed);
+            var reversed = (NetInt<uint>)value;
+            var original = (uint)reversed;
             if (value != original)
                 throw new InvalidOperationException();
         }
     }
 
-    [Benchmark]
-    public void ReverseEndianness_U64_Direct()
+    [Benchmark(Baseline = true)]
+    [BenchmarkCategory("64")]
+    public void U64_BinaryPrimitives()
     {
         foreach (var value in U64Values)
         {
@@ -80,19 +86,21 @@ public class ReverseEndiannessBenchmarks
     }
 
     [Benchmark]
-    public void ReverseEndianness_U64_Generic()
+    [BenchmarkCategory("64")]
+    public void U64_NetInt()
     {
         foreach (var value in U64Values)
         {
-            var reversed = ReverseEndianness(value);
-            var original = ReverseEndianness(reversed);
+            var reversed = (NetInt<ulong>)value;
+            var original = (ulong)reversed;
             if (value != original)
                 throw new InvalidOperationException();
         }
     }
 
-    [Benchmark]
-    public void ReverseEndianness_U128_Direct()
+    [Benchmark(Baseline = true)]
+    [BenchmarkCategory("128")]
+    public void U128_BinaryPrimitives()
     {
         foreach (var value in U128Values)
         {
@@ -104,17 +112,15 @@ public class ReverseEndiannessBenchmarks
     }
 
     [Benchmark]
-    public void ReverseEndianness_U128_Generic()
+    [BenchmarkCategory("128")]
+    public void U128_NetInt()
     {
         foreach (var value in U128Values)
         {
-            var reversed = ReverseEndianness(value);
-            var original = ReverseEndianness(reversed);
+            var reversed = (NetInt<UInt128>)value;
+            var original = (UInt128)reversed;
             if (value != original)
                 throw new InvalidOperationException();
         }
     }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static T ReverseEndianness<T>(T value) where T : unmanaged, IBinaryInteger<T> => BinaryPrimitives.ReverseEndianness(value);
 }

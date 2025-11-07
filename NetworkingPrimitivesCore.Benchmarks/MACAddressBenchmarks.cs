@@ -7,6 +7,7 @@ namespace NetworkingPrimitivesCore.Benchmarks;
 
 [MemoryDiagnoser]
 [ShortRunJob]
+[HideColumns("Error")]
 public class MACAddressBenchmarks
 {
     private static readonly string[] TestMACAddressStrings =
