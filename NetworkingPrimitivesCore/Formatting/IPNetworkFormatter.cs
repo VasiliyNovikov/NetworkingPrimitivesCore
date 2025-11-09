@@ -25,7 +25,7 @@ internal static class IPNetworkFormatter<TChar, TAddress, TUInt>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryFormat(TAddress address, byte prefix, Span<TChar> destination, out int charsWritten)
+    public static bool TryFormat(TAddress address, int prefix, Span<TChar> destination, out int charsWritten)
     {
         Span<TChar> prefixChars = Prefixes[prefix];
         if (address.TryFormat(destination, out charsWritten) && prefixChars.TryCopyTo(destination[charsWritten..]))

@@ -45,7 +45,7 @@ public readonly struct IPv4Network : IIPNetwork<IPv4Network, NetAddress, uint>
         get => _implementation.Mask;
     }
 
-    public byte Prefix
+    public int Prefix
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => _implementation.Prefix;
@@ -67,7 +67,7 @@ public readonly struct IPv4Network : IIPNetwork<IPv4Network, NetAddress, uint>
     private IPv4Network(IPNetworkImplementation implementation) => _implementation = implementation;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPv4Network(NetAddress address, byte? prefix = null, bool strict = true) : this(new(address, prefix, strict)) { }
+    public IPv4Network(NetAddress address, int? prefix = null, bool strict = true) : this(new(address, prefix, strict)) { }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Contains(NetAddress address) => _implementation.Contains(address);
@@ -88,10 +88,10 @@ public readonly struct IPv4Network : IIPNetwork<IPv4Network, NetAddress, uint>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPv4Network Subnet<TIndex>(byte prefix, TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex> => new(_implementation.Subnet(prefix, index));
+    public IPv4Network Subnet<TIndex>(int prefix, TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex> => new(_implementation.Subnet(prefix, index));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPv4Network Supernet(byte prefix) => new(_implementation.Supernet(prefix));
+    public IPv4Network Supernet(int prefix) => new(_implementation.Supernet(prefix));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => _implementation.GetHashCode();

@@ -17,10 +17,10 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     private static readonly TUInt[] IntHostMaskCache = [.. IntMaskCache.Select(mask => ~mask)];
     private static readonly TAddress[] MaskCache = [.. IntMaskCache.Select(mask => (TAddress)mask)];
 
-    private static byte BitSize
+    private static int BitSize
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => (byte)(Unsafe.SizeOf<TUInt>() * 8);
+        get => Unsafe.SizeOf<TUInt>() * 8;
     }
 
     public static int MaxStringLength
@@ -31,7 +31,7 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
 
     public readonly TAddress Address;
     public readonly TAddress Mask;
-    public readonly byte Prefix;
+    public readonly int Prefix;
 
     public TAddress Gateway
     {
@@ -46,7 +46,7 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private IPNetworkImplementation(TAddress address, TAddress mask, byte prefix)
+    private IPNetworkImplementation(TAddress address, TAddress mask, int prefix)
     {
         Address = address;
         Mask = mask;
@@ -54,7 +54,7 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPNetworkImplementation(TAddress address, byte? prefix, bool strict = true)
+    public IPNetworkImplementation(TAddress address, int? prefix, bool strict = true)
     {
         switch (TryInitialize(address, prefix, strict, out Address, out Mask, out Prefix))
         {
@@ -70,7 +70,7 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Contains(TAddress address) => Prefix == 0 || (address & Mask) == Address;
+    public bool Contains(in TAddress address) => Prefix == 0 || (address & Mask) == Address;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TAddress AddressAt<TIndex>(TIndex index)
@@ -85,7 +85,7 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPNetworkImplementation<TAddress, TUInt> Subnet<TIndex>(byte subnetPrefix, TIndex index)
+    public IPNetworkImplementation<TAddress, TUInt> Subnet<TIndex>(int subnetPrefix, TIndex index)
         where TIndex : unmanaged, IBinaryInteger<TIndex>
     {
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(subnetPrefix, Prefix);
@@ -94,7 +94,7 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPNetworkImplementation<TAddress, TUInt> Supernet(byte supernetPrefix)
+    public IPNetworkImplementation<TAddress, TUInt> Supernet(int supernetPrefix)
     {
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(supernetPrefix, Prefix);
         var supernetMask = MaskCache[supernetPrefix];
@@ -146,7 +146,7 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static InitializationResult TryInitialize(TAddress inputAddress, byte? inputPrefix, bool strict, out TAddress address, out TAddress mask, out byte prefix)
+    private static InitializationResult TryInitialize(TAddress inputAddress, int? inputPrefix, bool strict, out TAddress address, out TAddress mask, out int prefix)
     {
         prefix = inputPrefix ?? BitSize;
 

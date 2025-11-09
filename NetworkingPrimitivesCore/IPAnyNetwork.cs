@@ -41,7 +41,7 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
         get => _isV6 ? _ipv6Network.Mask : _ipv4Network.Mask;
     }
 
-    public byte Prefix
+    public int Prefix
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => _isV6 ? _ipv6Network.Prefix : _ipv4Network.Prefix;
@@ -60,7 +60,7 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPAnyNetwork(IPAnyAddress address, byte? prefix = null, bool strict = true)
+    public IPAnyNetwork(IPAnyAddress address, int? prefix = null, bool strict = true)
     {
         _isV6 = address.Version == 6;
         if (_isV6)
@@ -154,13 +154,13 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPAnyNetwork Subnet<TIndex>(byte prefix, TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex>
+    public IPAnyNetwork Subnet<TIndex>(int prefix, TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex>
     {
         return _isV6 ? _ipv6Network.Subnet(prefix, index) : _ipv4Network.Subnet(prefix, index);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPAnyNetwork Supernet(byte prefix) => _isV6 ? _ipv6Network.Supernet(prefix) : _ipv4Network.Supernet(prefix);
+    public IPAnyNetwork Supernet(int prefix) => _isV6 ? _ipv6Network.Supernet(prefix) : _ipv4Network.Supernet(prefix);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => _isV6 ? _ipv6Network.GetHashCode() : _ipv4Network.GetHashCode();

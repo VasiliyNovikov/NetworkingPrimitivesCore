@@ -10,13 +10,13 @@ public interface IIPNetworkBase<T, TAddress> : INetPrimitive<T>
 {
     TAddress Address { get; }
     TAddress Mask { get; }
-    byte Prefix { get; }
+    int Prefix { get; }
     TAddress Gateway { get; }
     TAddress Broadcast { get; }
     bool Contains(TAddress address);
     TAddress AddressAt<TIndex>(TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex>;
-    T Subnet<TIndex>(byte prefix, TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex>;
-    T Supernet(byte prefix);
+    T Subnet<TIndex>(int prefix, TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex>;
+    T Supernet(int prefix);
 
     static abstract bool TryParse<TChar>(ReadOnlySpan<TChar> source, bool strict, out T result) where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>;
     static abstract bool TryParse(string source, bool strict, out T result);

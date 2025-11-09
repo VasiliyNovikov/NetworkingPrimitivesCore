@@ -100,7 +100,7 @@ public class IPAnyNetworkTests
     public void IPNetwork_Subnet_Test(string networkString, int prefix, int index, string subnetString)
     {
         var network = IPAnyNetwork.Parse(networkString);
-        var subnet = network.Subnet((byte)prefix, index);
+        var subnet = network.Subnet(prefix, index);
         Assert.AreEqual(subnetString, subnet.ToString());
     }
 
@@ -116,7 +116,7 @@ public class IPAnyNetworkTests
     public void IPNetwork_Supernet_Test(string networkString, int prefix, string supernetString)
     {
         var network = IPAnyNetwork.Parse(networkString);
-        var supernet = network.Supernet((byte)prefix);
+        var supernet = network.Supernet(prefix);
         Assert.AreEqual(supernetString, supernet.ToString());
     }
 
