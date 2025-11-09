@@ -31,7 +31,7 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
 
     public readonly TAddress Address;
     public readonly TAddress Mask;
-    public readonly int Prefix;
+    public readonly int Prefix; // TODO: Revert to byte
 
     public TAddress Gateway
     {
