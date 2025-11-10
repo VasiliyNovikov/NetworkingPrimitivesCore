@@ -137,7 +137,7 @@ public readonly struct IPv6Address : IIPAddress<IPv6Address, UInt128>
     public bool TryFormat<TChar>(Span<TChar> destination, out int charsWritten)
         where TChar : unmanaged, IBinaryInteger<TChar>, IUnsignedNumber<TChar>
     {
-        return IPv6AddressFormatter<TChar>.TryFormat(Bytes, destination, out charsWritten);
+        return IPv6AddressFormatter<TChar>.TryFormat(Bytes, IsIPv4MappedToIPv6, destination, out charsWritten);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
