@@ -14,5 +14,5 @@ public interface IIPAddress<T, TUInt> : IIPAddressBase<T>, INetAddress<T, TUInt>
 {
     static abstract T Any { get; }
     static abstract T Loopback { get; }
-    static abstract int Version { get; }
+    static abstract byte Version { get; }
 }

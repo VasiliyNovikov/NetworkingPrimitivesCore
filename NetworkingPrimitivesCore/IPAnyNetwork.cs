@@ -41,10 +41,22 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
         get => _isV6 ? _ipv6Network.Mask : _ipv4Network.Mask;
     }
 
-    public int Prefix
+    public byte Prefix
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => _isV6 ? _ipv6Network.Prefix : _ipv4Network.Prefix;
+    }
+
+    public bool IsV6
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => _isV6;
+    }
+
+    public byte Version
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => _isV6 ? IPv6Address.Version : IPv4Address.Version;
     }
 
     public IPAnyAddress Gateway
@@ -60,9 +72,9 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPAnyNetwork(IPAnyAddress address, int? prefix = null, bool strict = true)
+    public IPAnyNetwork(IPAnyAddress address, byte? prefix = null, bool strict = true)
     {
-        _isV6 = address.Version == 6;
+        _isV6 = address.IsV6;
         if (_isV6)
             _ipv6Network = new IPv6Network((IPv6Address)address, prefix, strict);
         else
@@ -108,7 +120,7 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Contains(IPAnyAddress address)
     {
-        return address.Version == 6 == _isV6 && (_isV6 ? _ipv6Network.Contains((IPv6Address)address) : _ipv4Network.Contains((IPv4Address)address));
+        return address.IsV6 == _isV6 && (_isV6 ? _ipv6Network.Contains((IPv6Address)address) : _ipv4Network.Contains((IPv4Address)address));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -154,13 +166,13 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPAnyNetwork Subnet<TIndex>(int prefix, TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex>
+    public IPAnyNetwork Subnet<TIndex>(byte prefix, TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex>
     {
         return _isV6 ? _ipv6Network.Subnet(prefix, index) : _ipv4Network.Subnet(prefix, index);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPAnyNetwork Supernet(int prefix) => _isV6 ? _ipv6Network.Supernet(prefix) : _ipv4Network.Supernet(prefix);
+    public IPAnyNetwork Supernet(byte prefix) => _isV6 ? _ipv6Network.Supernet(prefix) : _ipv4Network.Supernet(prefix);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => _isV6 ? _ipv6Network.GetHashCode() : _ipv4Network.GetHashCode();

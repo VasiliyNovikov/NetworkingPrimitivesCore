@@ -85,7 +85,7 @@ public class IPv6NetworkTests
     public void IPv6Network_Subnet_Test(string networkString, int prefix, int index, string subnetString)
     {
         var network = IPv6Network.Parse(networkString);
-        var subnet = network.Subnet(prefix, index);
+        var subnet = network.Subnet((byte)prefix, index);
         Assert.AreEqual(subnetString, subnet.ToString());
     }
 
@@ -99,7 +99,7 @@ public class IPv6NetworkTests
     public void IPv6Network_Supernet_Test(string networkString, int prefix, string supernetString)
     {
         var network = IPv6Network.Parse(networkString);
-        var supernet = network.Supernet(prefix);
+        var supernet = network.Supernet((byte)prefix);
         Assert.AreEqual(supernetString, supernet.ToString());
     }
 

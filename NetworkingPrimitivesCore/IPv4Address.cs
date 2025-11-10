@@ -24,7 +24,7 @@ public readonly struct IPv4Address : IIPAddress<IPv4Address, uint>
         get => 15; // 4 bytes * 3 digits + 3 separators (e.g., "255.255.255.255")
     }
 
-    public static int Version
+    public static byte Version
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => 4;

@@ -45,7 +45,7 @@ public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128
         get => _implementation.Mask;
     }
 
-    public int Prefix
+    public byte Prefix
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => _implementation.Prefix;
@@ -67,7 +67,7 @@ public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128
     private IPv6Network(IPNetworkImplementation implementation) => _implementation = implementation;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPv6Network(NetAddress address, int? prefix = null, bool strict = true) : this(new(address, prefix, strict)) { }
+    public IPv6Network(NetAddress address, byte? prefix = null, bool strict = true) : this(new(address, prefix, strict)) { }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Contains(NetAddress address) => _implementation.Contains(address);
@@ -112,10 +112,10 @@ public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPv6Network Subnet<TIndex>(int prefix, TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex> => new(_implementation.Subnet(prefix, index));
+    public IPv6Network Subnet<TIndex>(byte prefix, TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex> => new(_implementation.Subnet(prefix, index));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IPv6Network Supernet(int prefix) => new(_implementation.Supernet(prefix));
+    public IPv6Network Supernet(byte prefix) => new(_implementation.Supernet(prefix));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => _implementation.GetHashCode();

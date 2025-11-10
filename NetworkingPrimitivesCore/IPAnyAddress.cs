@@ -40,7 +40,13 @@ public readonly struct IPAnyAddress
         get => _isV6 ? _ipv6Address.Bytes : _ipv4Address.Bytes;
     }
 
-    public int Version
+    public bool IsV6
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => _isV6;
+    }
+
+    public byte Version
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => _isV6 ? IPv6Address.Version : IPv4Address.Version;
