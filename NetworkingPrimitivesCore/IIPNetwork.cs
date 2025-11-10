@@ -45,7 +45,7 @@ public interface IIPNetwork<T, TAddress, TUInt> : IIPNetworkBase<T, TAddress>
     where TAddress : unmanaged, IIPAddress<TAddress, TUInt>
     where TUInt : unmanaged, IBinaryInteger<TUInt>, IUnsignedNumber<TUInt>
 {
-    static virtual int Version
+    static virtual byte Version
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => TAddress.Version;
