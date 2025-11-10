@@ -55,10 +55,27 @@ Networking primitives like NetInt, IPv4/IPv6 address/network, MAC address
 | Parse_IPv6_IPv6Address  |  0.48 |         - |
 
 ## IPAnyNetwork
-| Method              | Ratio | Allocated |
-|-------------------- |------:|----------:|
-| Format_IPNetwork    |  1.00 |         - |
-| Format_IPAnyNetwork |  0.92 |         - |
-|                     |       |           |
-| Parse_IPNetwork     |  1.00 |     480 B |
-| Parse_IPAnyNetwork  |  0.63 |         - |
+| Method                | Ratio | Allocated |
+|---------------------- |------:|----------:|
+| Contains_IPNetwork    |  1.00 |         - |
+| Contains_IPAnyNetwork |  0.82 |         - |
+|                       |       |           |
+| Format_IPNetwork      |  1.00 |         - |
+| Format_IPAnyNetwork   |  0.89 |         - |
+|                       |       |           |
+| Parse_IPNetwork       |  1.00 |     480 B |
+| Parse_IPAnyNetwork    |  0.62 |         - |
+
+## IPv4Network
+| Method               | Ratio | Allocated |
+|--------------------- |------:|----------:|
+| Contains_IPNetwork   |  1.00 |         - |
+| Contains_IPv4Network |  0.37 |         - |
+|                      |       |           |
+| Format_IPNetwork     |  1.00 |         - |
+| Format_IPv4Network   |  0.60 |         - |
+|                      |       |           |
+| Parse_IPNetwork      |  1.00 |     160 B |
+| Parse_IPv4Network    |  0.70 |         - |
+
+## IPv6Network
