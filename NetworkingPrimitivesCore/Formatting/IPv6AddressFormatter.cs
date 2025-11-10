@@ -174,10 +174,10 @@ internal static class IPv6AddressFormatter<TChar>
     private static bool TryReadSeparator(ref SpanReader<TChar> reader) => reader.TryReadOne(Separator);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryFormat(ReadOnlySpan<byte> ipAddressBytes, Span<TChar> destination, out int charsWritten)
+    public static bool TryFormat(ReadOnlySpan<byte> ipAddressBytes, bool isIPv4MappedToIPv6, Span<TChar> destination, out int charsWritten)
     {
         var writer = new SpanWriter<TChar>(destination);
-        var result = ipAddressBytes.StartsWith(IPv4MappedToIPv6Prefix)
+        var result = isIPv4MappedToIPv6
             ? TryWriteIPv4MappedToIPv6(ref writer, ipAddressBytes)
             : TryWriteIPv6(ref writer, ipAddressBytes);
         charsWritten = writer.Position;

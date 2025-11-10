@@ -31,10 +31,10 @@ Networking primitives like NetInt, IPv4/IPv6 address/network, MAC address
 | Method              | Ratio | Allocated |
 |-------------------- |------:|----------:|
 | Format_IPAddress    |  1.00 |         - |
-| Format_IPAnyAddress |  0.69 |         - |
+| Format_IPAnyAddress |  0.65 |         - |
 |                     |       |           |
 | Parse_IPAddress     |  1.00 |    1000 B |
-| Parse_IPAnyAddress  |  0.46 |         - |
+| Parse_IPAnyAddress  |  0.45 |         - |
 
 ## IPv4Address
 | Method                  | Ratio | Allocated |
@@ -52,19 +52,19 @@ Networking primitives like NetInt, IPv4/IPv6 address/network, MAC address
 | Format_IPv6_IPv6Address |  0.71 |         - |
 |                         |       |           |
 | Parse_IPv6_IPAddress    |  1.00 |     720 B |
-| Parse_IPv6_IPv6Address  |  0.48 |         - |
+| Parse_IPv6_IPv6Address  |  0.46 |         - |
 
 ## IPAnyNetwork
 | Method                | Ratio | Allocated |
 |---------------------- |------:|----------:|
 | Contains_IPNetwork    |  1.00 |         - |
-| Contains_IPAnyNetwork |  0.82 |         - |
+| Contains_IPAnyNetwork |  0.87 |         - |
 |                       |       |           |
 | Format_IPNetwork      |  1.00 |         - |
-| Format_IPAnyNetwork   |  0.89 |         - |
+| Format_IPAnyNetwork   |  0.78 |         - |
 |                       |       |           |
 | Parse_IPNetwork       |  1.00 |     480 B |
-| Parse_IPAnyNetwork    |  0.62 |         - |
+| Parse_IPAnyNetwork    |  0.63 |         - |
 
 ## IPv4Network
 | Method               | Ratio | Allocated |
@@ -82,10 +82,10 @@ Networking primitives like NetInt, IPv4/IPv6 address/network, MAC address
 | Method               | Ratio | Allocated |
 |--------------------- |------:|----------:|
 | Contains_IPNetwork   |  1.00 |         - |
-| Contains_IPv6Network |  0.24 |         - |
+| Contains_IPv6Network |  0.23 |         - |
 |                      |       |           |
 | Format_IPNetwork     |  1.00 |         - |
-| Format_IPv6Network   |  1.10 |         - |
+| Format_IPv6Network   |  0.87 |         - |
 |                      |       |           |
 | Parse_IPNetwork      |  1.00 |     320 B |
 | Parse_IPv6Network    |  0.65 |         - |
