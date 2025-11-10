@@ -120,7 +120,7 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Contains(IPAnyAddress address)
     {
-        return address.IsV6 == _isV6 && (_isV6 ? _ipv6Network.Contains((IPv6Address)address) : _ipv4Network.Contains((IPv4Address)address));
+        return _isV6 == address.IsV6 && (_isV6 ? _ipv6Network.Contains((IPv6Address)address) : _ipv4Network.Contains((IPv4Address)address));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
