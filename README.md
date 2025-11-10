@@ -79,3 +79,13 @@ Networking primitives like NetInt, IPv4/IPv6 address/network, MAC address
 | Parse_IPv4Network    |  0.70 |         - |
 
 ## IPv6Network
+| Method               | Ratio | Allocated |
+|--------------------- |------:|----------:|
+| Contains_IPNetwork   |  1.00 |         - |
+| Contains_IPv6Network |  0.24 |         - |
+|                      |       |           |
+| Format_IPNetwork     |  1.00 |         - |
+| Format_IPv6Network   |  1.10 |         - |
+|                      |       |           |
+| Parse_IPNetwork      |  1.00 |     320 B |
+| Parse_IPv6Network    |  0.65 |         - |
