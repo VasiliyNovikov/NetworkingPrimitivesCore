@@ -61,7 +61,7 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Contains(in TAddress address) => Prefix == 0 || (address & Mask) == Address;
+    public bool Contains(TAddress address) => Prefix == 0 || (address & Mask) == Address;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TAddress AddressAt<TIndex>(TIndex index)
