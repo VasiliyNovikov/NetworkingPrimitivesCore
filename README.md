@@ -1,6 +1,9 @@
 # NetworkingPrimitivesCore
 Networking primitives like NetInt, IPv4/IPv6 address/network, MAC address
 
+[![NetworkingPrimitivesCore release](https://img.shields.io/nuget/v/NetworkingPrimitivesCore)](https://www.nuget.org/packages/NetworkingPrimitivesCore/)
+[![NetworkingPrimitivesCore download count](https://img.shields.io/nuget/dt/NetworkingPrimitivesCore)](https://www.nuget.org/packages/NetworkingPrimitivesCore/)
+
 # Benchmarks
 
 ## NetInt
