@@ -20,7 +20,7 @@ internal static class IPNetworkFormatter<TChar, TAddress, TUInt>
         for (var prefix = 0; prefix < Prefixes.Length; ++prefix)
         {
             prefix.TryFormat(buffer[1..], out var charsWritten, provider: CultureInfo.InvariantCulture);
-            Prefixes[prefix] = buffer[..(charsWritten + 1)].ToArray();
+            Prefixes[prefix] = [.. buffer[..(charsWritten + 1)]];
         }
     }
 
