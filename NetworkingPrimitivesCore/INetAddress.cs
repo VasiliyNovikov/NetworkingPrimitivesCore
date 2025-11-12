@@ -10,19 +10,16 @@ public interface INetAddressBase<T> : INetPrimitive<T>
     ReadOnlySpan<byte> Bytes { get; }
 }
 
-public interface INetAddress<T, TUInt>
-    : INetAddressBase<T>
-    , IBitwiseOperators<T, T, T>
-    , INetIntConvertible<T, TUInt>
+public interface INetAddress<T> : INetAddressBase<T>, IBitwiseOperators<T, T, T>
+    where T : unmanaged, INetAddress<T>
+{
+    static abstract T Broadcast { get; }
+}
+
+public interface INetAddress<T, TUInt> : INetAddress<T>, INetIntConvertible<T, TUInt>
     where T : unmanaged, INetAddress<T, TUInt>
     where TUInt : unmanaged, IBinaryInteger<TUInt>, IUnsignedNumber<TUInt>
 {
-    static virtual T Broadcast
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => (T)TUInt.AllBitsSet;
-    }
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     static abstract explicit operator TUInt(T value);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

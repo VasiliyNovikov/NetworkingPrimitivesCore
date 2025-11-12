@@ -30,10 +30,16 @@ public readonly struct IPv4Address : IIPAddress<IPv4Address, uint>
         get => 4;
     }
 
+    public static IPv4Address Broadcast
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => (IPv4Address)uint.MaxValue;
+    }
+
     public static IPv4Address Loopback
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => (IPv4Address)(NetUInt32)0x7F_00_00_01u;
+        get => (IPv4Address)0x7F_00_00_01u;
     }
 
     public static IPv4Address Any

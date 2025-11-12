@@ -24,6 +24,12 @@ public readonly struct MACAddress : INetAddress<MACAddress, UInt48>
         get => 17; // 6 bytes * 2 hex digits + 5 separators (e.g., "00:00:00:00:00:00")
     }
 
+    public static MACAddress Broadcast
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => (MACAddress)UInt48.MaxValue;
+    }
+
     private readonly NetUInt48 _value;
 
     public ReadOnlySpan<byte> Bytes

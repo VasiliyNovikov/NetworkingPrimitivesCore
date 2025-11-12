@@ -33,6 +33,12 @@ public readonly struct IPv6Address : IIPAddress<IPv6Address, UInt128>
         get => 6;
     }
 
+    public static IPv6Address Broadcast
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => (IPv6Address)UInt128.MaxValue;
+    }
+
     public static IPv6Address Loopback
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

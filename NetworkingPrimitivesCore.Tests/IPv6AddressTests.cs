@@ -11,6 +11,9 @@ public class IPv6AddressTests
     [TestMethod]
     public void IPv6Address_Size_Test() => Assert.AreEqual(16, Unsafe.SizeOf<IPv6Address>());
 
+    [TestMethod]
+    public void IPv6Address_Broadcast_Test() => Assert.AreEqual(IPv6Address.Parse("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"), IPv6Address.Broadcast);
+
     private static object[][] Test_IPAddresses() =>
     [
         ["::"],

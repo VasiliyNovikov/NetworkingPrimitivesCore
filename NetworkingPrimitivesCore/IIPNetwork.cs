@@ -40,14 +40,14 @@ public interface IIPNetworkBase<T, TAddress> : INetPrimitive<T>
     }
 }
 
-public interface IIPNetwork<T, TAddress, TUInt> : IIPNetworkBase<T, TAddress>
+public interface IIPNetwork<T, TAddress> : IIPNetworkBase<T, TAddress>
+    where T : unmanaged, IIPNetwork<T, TAddress>
+    where TAddress : unmanaged, IIPAddress<TAddress>
+{
+    static abstract byte Version { get; }
+}
+
+public interface IIPNetwork<T, TAddress, TUInt> : IIPNetwork<T, TAddress>
     where T : unmanaged, IIPNetwork<T, TAddress, TUInt>
     where TAddress : unmanaged, IIPAddress<TAddress, TUInt>
-    where TUInt : unmanaged, IBinaryInteger<TUInt>, IUnsignedNumber<TUInt>
-{
-    static virtual byte Version
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => TAddress.Version;
-    }
-}
+    where TUInt : unmanaged, IBinaryInteger<TUInt>, IUnsignedNumber<TUInt>;
