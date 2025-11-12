@@ -25,7 +25,7 @@ public readonly struct IPv4Network : IIPNetwork<IPv4Network, NetAddress, uint>
         get => IPNetworkImplementation.MaxStringLength;
     }
 
-    public static int Version
+    public static byte Version
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => NetAddress.Version;

@@ -25,7 +25,7 @@ public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128
         get => IPNetworkImplementation.MaxStringLength;
     }
 
-    public static int Version
+    public static byte Version
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => NetAddress.Version;

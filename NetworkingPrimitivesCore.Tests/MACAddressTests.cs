@@ -10,6 +10,9 @@ public class MACAddressTests
     [TestMethod]
     public void MACAddress_Size_Test() => Assert.AreEqual(6, Unsafe.SizeOf<MACAddress>());
 
+    [TestMethod]
+    public void MACAddress_Broadcast_Test() => Assert.AreEqual(MACAddress.Parse("ff:ff:ff:ff:ff:ff"), MACAddress.Broadcast);
+
     private static object[][] Test_Format_MACAddresses() =>
     [
         ["4e:81:c0:3c:d1:4f", new byte[]{0x4E, 0x81, 0xC0, 0x3C, 0xD1, 0x4F}],

@@ -10,6 +10,9 @@ public class IPv4AddressTests
 {
     [TestMethod]
     public void IPv4Address_Size_Test() => Assert.AreEqual(4, Unsafe.SizeOf<IPv4Address>());
+    
+    [TestMethod]
+    public void IPv4Address_Broadcast_Test() => Assert.AreEqual(IPv4Address.Parse("255.255.255.255"), IPv4Address.Broadcast);
 
     private static object[][] Test_IPAddresses() =>
     [
