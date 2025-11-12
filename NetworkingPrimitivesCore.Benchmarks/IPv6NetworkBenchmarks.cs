@@ -76,9 +76,9 @@ public class IPv6NetworkBenchmarks
     {
         var count = 0;
         foreach (var network in TestIPNetworks)
-        foreach (var address in TestIPAddresses)
-            if (network.Contains(address))
-                ++count;
+            foreach (var address in TestIPAddresses)
+                if (network.Contains(address))
+                    ++count;
         return count;
     }
 
@@ -88,9 +88,9 @@ public class IPv6NetworkBenchmarks
     {
         var count = 0;
         foreach (var network in TestIPv6Networks)
-        foreach (var address in TestIPv6Addresses)
-            if (network.Contains(address))
-                ++count;
+            foreach (var address in TestIPv6Addresses)
+                if (network.Contains(address))
+                    ++count;
         return count;
     }
 }
