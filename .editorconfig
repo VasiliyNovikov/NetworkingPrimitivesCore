@@ -21,6 +21,7 @@ dotnet_diagnostic.IDE0021.severity = none  # Use block body for constructor
 dotnet_diagnostic.IDE0022.severity = none  # Use block body for method
 dotnet_diagnostic.IDE0023.severity = none  # Use block body for conversion operator
 dotnet_diagnostic.IDE0024.severity = none  # Use block body for operator
+dotnet_diagnostic.IDE0055.severity = error # Fix formatting
 
 dotnet_diagnostic.CS1591.severity = none  # Missing XML comment for publicly visible type or member
 

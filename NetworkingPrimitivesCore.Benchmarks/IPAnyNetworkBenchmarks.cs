@@ -84,9 +84,9 @@ public class IPAnyNetworkBenchmarks
     {
         var count = 0;
         foreach (var network in TestIPNetworks)
-        foreach (var address in TestIPAddresses)
-            if (network.Contains(address))
-                ++count;
+            foreach (var address in TestIPAddresses)
+                if (network.Contains(address))
+                    ++count;
         return count;
     }
 
@@ -96,9 +96,9 @@ public class IPAnyNetworkBenchmarks
     {
         var count = 0;
         foreach (var network in TestIPAnyNetworks)
-        foreach (var address in TestIPAnyAddresses)
-            if (network.Contains(address))
-                ++count;
+            foreach (var address in TestIPAnyAddresses)
+                if (network.Contains(address))
+                    ++count;
         return count;
     }
 }
