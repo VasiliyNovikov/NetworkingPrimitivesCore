@@ -80,7 +80,7 @@ public readonly struct IPv4Address : IIPAddress<IPv4Address, uint>
         if (address.AddressFamily != AddressFamily.InterNetwork)
             throw new InvalidCastException($"Cannot cast IPv6 address {address} to IPv4 address");
         Span<byte> addressBytes = stackalloc byte[Unsafe.SizeOf<IPv4Address>()];
-        address.TryFormat(addressBytes, out _);
+        address.TryWriteBytes(addressBytes, out _);
         return new(addressBytes);
     }
 
