@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel;
+using System.Net;
+using System.Net.Sockets;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -67,6 +69,20 @@ public readonly struct IPv4Address : IIPAddress<IPv4Address, uint>
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IPv4Address(ReadOnlySpan<byte> addressBytes) => _value = MemoryMarshal.Read<NetUInt32>(addressBytes);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator IPAddress(IPv4Address address) => new(address.Bytes);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
+    public static implicit operator IPv4Address(IPAddress address)
+    {
+        if (address.AddressFamily != AddressFamily.InterNetwork)
+            throw new InvalidCastException($"Cannot cast IPv6 address {address} to IPv4 address");
+        Span<byte> addressBytes = stackalloc byte[Unsafe.SizeOf<IPv4Address>()];
+        address.TryFormat(addressBytes, out _);
+        return new(addressBytes);
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator NetUInt32(IPv4Address value) => value._value;
