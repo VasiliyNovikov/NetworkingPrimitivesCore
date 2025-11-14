@@ -1,3 +1,4 @@
+using System.Net;
 using System.Numerics;
 
 namespace NetworkingPrimitivesCore;
@@ -6,6 +7,9 @@ public interface IIPAddressBase<T> : INetAddressBase<T>
     where T : unmanaged, IIPAddressBase<T>
 {
     bool IsLinkLocal { get; }
+
+    public static abstract explicit operator IPAddress(T address);
+    public static abstract implicit operator T(IPAddress address);
 }
 
 public interface IIPAddress<T> : IIPAddressBase<T>, INetAddress<T>

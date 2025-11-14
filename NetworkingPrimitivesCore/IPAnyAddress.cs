@@ -99,6 +99,8 @@ public readonly struct IPAnyAddress
         _ipv6Address = address;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
     public IPAnyAddress(IPAddress address)
     {
         ArgumentNullException.ThrowIfNull(address);
