@@ -15,6 +15,7 @@ dotnet_separate_import_directive_groups = true
 dotnet_sort_system_directives_first = true
 csharp_style_namespace_declarations = file_scoped
 
+dotnet_diagnostic.CA1715.severity  = none  # Identifiers should have correct prefix
 dotnet_diagnostic.IDE0008.severity = none  # Use explicit type
 dotnet_diagnostic.IDE0011.severity = none  # Add braces
 dotnet_diagnostic.IDE0021.severity = none  # Use block body for constructor

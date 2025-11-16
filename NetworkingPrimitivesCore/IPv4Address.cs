@@ -18,7 +18,7 @@ namespace NetworkingPrimitivesCore;
 [JsonConverter(typeof(JsonNetPrimitiveConverter<IPv4Address>))]
 [TypeConverter(typeof(NetPrimitiveTypeConverter<IPv4Address>))]
 [StructLayout(LayoutKind.Sequential)]
-public readonly struct IPv4Address : IIPAddress<IPv4Address, uint>
+public readonly struct IPv4Address : IIPAddress<IPv4Address, uint>, IIPVersioned<IPv4>
 {
     public static int MaxStringLength
     {
@@ -29,7 +29,7 @@ public readonly struct IPv4Address : IIPAddress<IPv4Address, uint>
     public static byte Version
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => 4;
+        get => IPv4.Version;
     }
 
     public static IPv4Address Broadcast

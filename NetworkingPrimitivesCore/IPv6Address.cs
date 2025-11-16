@@ -18,7 +18,7 @@ namespace NetworkingPrimitivesCore;
 [JsonConverter(typeof(JsonNetPrimitiveConverter<IPv6Address>))]
 [TypeConverter(typeof(NetPrimitiveTypeConverter<IPv6Address>))]
 [StructLayout(LayoutKind.Sequential)]
-public readonly struct IPv6Address : IIPAddress<IPv6Address, UInt128>
+public readonly struct IPv6Address : IIPAddress<IPv6Address, UInt128>, IIPVersioned<IPv6>
 {
     private static readonly NetUInt128 MappedIPv4Mask = (NetUInt128)new UInt128(UInt64.MaxValue, 0xFF_FF_FF_FF_00_00_00_00UL);
     private static readonly NetUInt128 MappedIPv4Prefix = (NetUInt128)new UInt128(0UL, 0x00_00_FF_FF_00_00_00_00UL);
@@ -32,7 +32,7 @@ public readonly struct IPv6Address : IIPAddress<IPv6Address, UInt128>
     public static byte Version
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => 6;
+        get => IPv6.Version;
     }
 
     public static IPv6Address Broadcast

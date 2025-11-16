@@ -49,7 +49,7 @@ public readonly struct IPAnyAddress
     public byte Version
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => _isV6 ? IPv6Address.Version : IPv4Address.Version;
+        get => _isV6 ? IPv6.Version : IPv4.Version;
     }
 
     public AddressFamily AddressFamily
