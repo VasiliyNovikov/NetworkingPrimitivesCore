@@ -56,7 +56,7 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
     public byte Version
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => _isV6 ? IPv6Address.Version : IPv4Address.Version;
+        get => _isV6 ? IPv6.Version : IPv4.Version;
     }
 
     public IPAnyAddress Gateway
