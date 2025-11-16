@@ -17,7 +17,7 @@ namespace NetworkingPrimitivesCore;
 [JsonConverter(typeof(JsonNetPrimitiveConverter<IPv4Network>))]
 [TypeConverter(typeof(NetPrimitiveTypeConverter<IPv4Network>))]
 [StructLayout(LayoutKind.Sequential)]
-public readonly struct IPv4Network : IIPNetwork<IPv4Network, NetAddress, uint>
+public readonly struct IPv4Network : IIPNetwork<IPv4Network, NetAddress, uint>, IIPVersioned<IPv4>
 {
     public static int MaxStringLength
     {

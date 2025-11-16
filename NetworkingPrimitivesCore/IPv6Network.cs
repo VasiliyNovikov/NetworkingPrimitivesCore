@@ -17,7 +17,7 @@ namespace NetworkingPrimitivesCore;
 [JsonConverter(typeof(JsonNetPrimitiveConverter<IPv6Network>))]
 [TypeConverter(typeof(NetPrimitiveTypeConverter<IPv6Network>))]
 [StructLayout(LayoutKind.Sequential)]
-public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128>
+public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128>, IIPVersioned<IPv6>
 {
     public static int MaxStringLength
     {
