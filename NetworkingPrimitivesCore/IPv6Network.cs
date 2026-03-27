@@ -73,6 +73,9 @@ public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128
     public bool Contains(NetAddress address) => _implementation.Contains(address);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool Contains(IPv6Network network) => _implementation.Contains(network._implementation);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public NetAddress AddressAt<TIndex>(TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex> => _implementation.AddressAt(index);
 
     public NetAddress this[int index]

@@ -73,6 +73,9 @@ public readonly struct IPv4Network : IIPNetwork<IPv4Network, NetAddress, uint>, 
     public bool Contains(NetAddress address) => _implementation.Contains(address);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool Contains(IPv4Network network) => _implementation.Contains(network._implementation);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public NetAddress AddressAt<TIndex>(TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex> => _implementation.AddressAt(index);
 
     public NetAddress this[int index]

@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../NetworkingPrimitivesCore.props" />
   <ItemGroup>
     <PackageReference Include="MSTest" />
     <PackageReference Include="Newtonsoft.Json" />

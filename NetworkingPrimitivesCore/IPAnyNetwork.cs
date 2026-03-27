@@ -124,6 +124,12 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool Contains(IPAnyNetwork network)
+    {
+        return _isV6 == network.IsV6 && (_isV6 ? _ipv6Network.Contains((IPv6Network)network) : _ipv4Network.Contains((IPv4Network)network));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IPAnyAddress AddressAt<TIndex>(TIndex index) where TIndex : unmanaged, IBinaryInteger<TIndex>
     {
         return _isV6 ? _ipv6Network.AddressAt(index) : _ipv4Network.AddressAt(index);
