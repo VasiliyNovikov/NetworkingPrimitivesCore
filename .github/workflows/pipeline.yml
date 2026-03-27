@@ -63,7 +63,7 @@ jobs:
       - name: Package Version
         id: package_version
         run: |
-          version=$(dotnet run ./.github/workflows/package_version.cs)
+          version=$(dotnet ./.github/workflows/PackageVersion.cs)
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Pack

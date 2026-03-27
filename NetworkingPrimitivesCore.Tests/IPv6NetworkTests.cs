@@ -61,6 +61,45 @@ public class IPv6NetworkTests
         Assert.AreEqual(contains, network.Contains(address), $"{address} is {(contains ? "" : "not ")}in the {network}");
     }
 
+    private static IEnumerable<object[]> IPv6Network_ContainsNetwork_Test_Data() =>
+    [
+        // Subnet contained in supernet
+        ["2001:db8::/32", "2001:db8:1::/48", true],
+        ["fec0::/16", "fec0:1::/32", true],
+        // Equal networks
+        ["fec0::/64", "fec0::/64", true],
+        // Supernet NOT contained in subnet
+        ["fec0::/64", "fec0::/32", false],
+        // Disjoint networks, same prefix
+        ["fec0::/64", "fec1::/64", false],
+        // Disjoint networks, different prefix
+        ["2001:db8::/32", "fe80::/10", false],
+        // Host network (/128) contained in larger network
+        ["fec0::/64", "fec0::1/128", true],
+        // Host network (/128) NOT contained
+        ["fec0::/64", "fec1::1/128", false],
+        // /128 contains only itself
+        ["2001:db8::1/128", "2001:db8::1/128", true],
+        ["2001:db8::1/128", "2001:db8::2/128", false],
+        // Boundary: subnet at the end of parent range
+        ["2001:db8::/32", "2001:db8:ffff::/48", true],
+        // Boundary: subnet just outside parent range
+        ["2001:db8::/32", "2001:db9::/48", false],
+        // /0 contains everything
+        ["::/0", "2001:db8::/32", true],
+        ["::/0", "fec0::/64", true],
+        ["::/0", "::/0", true]
+    ];
+
+    [TestMethod]
+    [DynamicData(nameof(IPv6Network_ContainsNetwork_Test_Data))]
+    public void IPv6Network_ContainsNetwork_Test(string outerString, string innerString, bool contains)
+    {
+        var outer = IPv6Network.Parse(outerString, false);
+        var inner = IPv6Network.Parse(innerString, false);
+        Assert.AreEqual(contains, outer.Contains(inner), $"{innerString} is {(contains ? "" : "not ")}in {outerString}");
+    }
+
     private static IEnumerable<object[]> IPv6Network_Indexer_Test_Data() =>
     [
         ["fec0::/64", 0u, "fec0::"],

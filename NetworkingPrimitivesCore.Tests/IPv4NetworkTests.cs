@@ -62,6 +62,45 @@ public class IPv4NetworkTests
         Assert.AreEqual(contains, network.Contains(address), $"{address} is {(contains ? "" : "not ")}in the {network}");
     }
 
+    private static IEnumerable<object[]> IPv4Network_ContainsNetwork_Test_Data() =>
+    [
+        // Subnet contained in supernet
+        ["10.0.0.0/8", "10.1.0.0/16", true],
+        ["192.168.0.0/16", "192.168.1.0/24", true],
+        // Equal networks
+        ["10.0.0.0/24", "10.0.0.0/24", true],
+        // Supernet NOT contained in subnet
+        ["10.0.0.0/24", "10.0.0.0/16", false],
+        // Disjoint networks, same prefix
+        ["10.0.0.0/24", "10.0.1.0/24", false],
+        // Disjoint networks, different prefix
+        ["192.168.1.0/24", "10.0.0.0/8", false],
+        // Host network (/32) contained in larger network
+        ["10.10.128.0/22", "10.10.128.1/32", true],
+        // Host network (/32) NOT contained
+        ["10.10.128.0/22", "10.11.0.0/32", false],
+        // /32 contains only itself
+        ["10.0.0.1/32", "10.0.0.1/32", true],
+        ["10.0.0.1/32", "10.0.0.2/32", false],
+        // Boundary: subnet at the end of parent range
+        ["10.0.0.0/8", "10.255.255.0/24", true],
+        // Boundary: subnet just outside parent range
+        ["10.0.0.0/8", "11.0.0.0/24", false],
+        // /0 contains everything
+        ["0.0.0.0/0", "10.0.0.0/8", true],
+        ["0.0.0.0/0", "192.168.1.0/24", true],
+        ["0.0.0.0/0", "0.0.0.0/0", true]
+    ];
+
+    [TestMethod]
+    [DynamicData(nameof(IPv4Network_ContainsNetwork_Test_Data))]
+    public void IPv4Network_ContainsNetwork_Test(string outerString, string innerString, bool contains)
+    {
+        var outer = IPv4Network.Parse(outerString, false);
+        var inner = IPv4Network.Parse(innerString, false);
+        Assert.AreEqual(contains, outer.Contains(inner), $"{innerString} is {(contains ? "" : "not ")}in {outerString}");
+    }
+
     private static IEnumerable<object[]> IPv4Network_Indexer_Test_Data() =>
     [
         ["10.10.128.0/22", 0u, "10.10.128.0"],

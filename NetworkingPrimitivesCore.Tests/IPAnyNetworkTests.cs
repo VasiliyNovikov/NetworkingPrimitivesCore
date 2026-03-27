@@ -72,6 +72,52 @@ public class IPAnyNetworkTests
         Assert.AreEqual(contains, network.Contains(address), $"{address} is {(contains ? "" : "not ")}in the {network}");
     }
 
+    private static IEnumerable<object[]> IPNetwork_ContainsNetwork_Test_Data() =>
+    [
+        // IPv4: subnet contained in supernet
+        ["10.0.0.0/8", "10.1.0.0/16", true],
+        ["192.168.0.0/16", "192.168.1.0/24", true],
+        // IPv4: equal networks
+        ["10.0.0.0/24", "10.0.0.0/24", true],
+        // IPv4: supernet NOT contained in subnet
+        ["10.0.0.0/24", "10.0.0.0/16", false],
+        // IPv4: disjoint networks
+        ["10.0.0.0/24", "10.0.1.0/24", false],
+        // IPv4: host network contained
+        ["10.10.128.0/22", "10.10.128.1/32", true],
+        // IPv4: /0 contains everything
+        ["0.0.0.0/0", "10.0.0.0/8", true],
+        // IPv6: subnet contained in supernet
+        ["2001:db8::/32", "2001:db8:1::/48", true],
+        ["fec0::/16", "fec0:1::/32", true],
+        // IPv6: equal networks
+        ["fec0::/64", "fec0::/64", true],
+        // IPv6: supernet NOT contained in subnet
+        ["fec0::/64", "fec0::/32", false],
+        // IPv6: disjoint networks
+        ["fec0::/64", "fec1::/64", false],
+        // IPv6: host network contained
+        ["fec0::/64", "fec0::1/128", true],
+        // IPv6: /0 contains everything
+        ["::/0", "2001:db8::/32", true],
+        // Cross-version: IPv4 network does NOT contain IPv6 network
+        ["10.0.0.0/8", "fec0::/64", false],
+        // Cross-version: IPv6 network does NOT contain IPv4 network
+        ["fec0::/64", "10.0.0.0/8", false],
+        // Cross-version: /0 networks of different versions do not contain each other
+        ["0.0.0.0/0", "::/0", false],
+        ["::/0", "0.0.0.0/0", false]
+    ];
+
+    [TestMethod]
+    [DynamicData(nameof(IPNetwork_ContainsNetwork_Test_Data))]
+    public void IPNetwork_ContainsNetwork_Test(string outerString, string innerString, bool contains)
+    {
+        var outer = IPAnyNetwork.Parse(outerString, false);
+        var inner = IPAnyNetwork.Parse(innerString, false);
+        Assert.AreEqual(contains, outer.Contains(inner), $"{innerString} is {(contains ? "" : "not ")}in {outerString}");
+    }
+
     private static IEnumerable<object[]> IPNetwork_Indexer_Test_Data() =>
     [
         ["10.10.128.0/22", 0u, "10.10.128.0"],
