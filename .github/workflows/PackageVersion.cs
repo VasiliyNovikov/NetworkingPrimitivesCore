@@ -4,6 +4,7 @@
 using System.Text.Json;
 using System.Xml;
 using System.Net;
+
 using NuGet.Versioning;
 
 const string projectName = "NetworkingPrimitivesCore";
