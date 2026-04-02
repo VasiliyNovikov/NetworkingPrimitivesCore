@@ -10,12 +10,23 @@ namespace NetworkingPrimitivesCore.Json;
 internal sealed class JsonNetPrimitiveConverter<T> : JsonConverter<T>
     where T : unmanaged, INetPrimitive<T>
 {
-    [SkipLocalsInit]
     public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (reader.TokenType != JsonTokenType.String)
-            throw new JsonException($"Expected string token but got {reader.TokenType}.");
+        return reader.TokenType == JsonTokenType.String
+            ? ReadCore(ref reader)
+            : throw new JsonException($"Expected string token but got {reader.TokenType}.");
+    }
 
+    public override T ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        return reader.TokenType == JsonTokenType.PropertyName
+            ? ReadCore(ref reader)
+            : throw new JsonException($"Expected property name token but got {reader.TokenType}.");
+    }
+
+    [SkipLocalsInit]
+    private static T ReadCore(ref Utf8JsonReader reader)
+    {
         Span<byte> buffer = stackalloc byte[T.MaxStringLength];
         buffer = buffer[..reader.CopyString(buffer)];
         try
@@ -27,8 +38,6 @@ internal sealed class JsonNetPrimitiveConverter<T> : JsonConverter<T>
             throw new JsonException(e.Message, e);
         }
     }
-
-    public override T ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 
     [SkipLocalsInit]
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
