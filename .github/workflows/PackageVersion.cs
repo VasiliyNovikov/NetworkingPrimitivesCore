@@ -21,7 +21,7 @@ try
 {
     using HttpClient client = new();
     var versionsJson = await client.GetStringAsync($"https://api.nuget.org/v3-flatcontainer/{projectName.ToLowerInvariant()}/index.json");
-    versions = JsonSerializer.Deserialize<NuGetVersions>(versionsJson)!.versions.Select(v => SemanticVersion.Parse(v));
+    versions = JsonSerializer.Deserialize<NuGetVersions>(versionsJson)!.versions.Select(SemanticVersion.Parse);
 }
 catch (HttpRequestException e) when (e.StatusCode == HttpStatusCode.NotFound)
 {
