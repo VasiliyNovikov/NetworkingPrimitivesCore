@@ -1,5 +1,6 @@
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -37,5 +38,15 @@ public class IPAnyAddressTests
 
         CollectionAssert.AreEqual(fwAddress.GetAddressBytes(), ipAddress.Bytes.ToArray());
         Assert.AreEqual(expectedAddressStr, actualAddressStr);
+    }
+
+    [TestMethod]
+    [DataRow("0.0.0.0", new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 })]
+    [DataRow("::", new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 })]
+    public void IPAnyAddress_MemoryLayout_Test(string addressStr, byte[] expectedLayout)
+    {
+        var address = IPAnyAddress.Parse(addressStr);
+        var layout = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref address, 1)).ToArray();
+        CollectionAssert.AreEqual(expectedLayout, layout);
     }
 }
