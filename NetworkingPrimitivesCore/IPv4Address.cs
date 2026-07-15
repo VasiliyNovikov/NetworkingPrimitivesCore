@@ -64,6 +64,12 @@ public readonly struct IPv4Address : IIPAddress<IPv4Address, uint>, IIPVersioned
         get => Bytes[0] == 169 && Bytes[1] == 254;
     }
 
+    public bool IsLoopback
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => Bytes[0] == 127;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private IPv4Address(NetUInt32 value) => _value = value;
 

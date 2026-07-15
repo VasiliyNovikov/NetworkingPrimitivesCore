@@ -12,6 +12,14 @@ public class IPAnyAddressTests
     [TestMethod]
     public void IPAnyAddress_Size_Test() => Assert.AreEqual(20, Unsafe.SizeOf<IPAnyAddress>());
 
+    [TestMethod]
+    [DataRow("127.0.0.2", true)]
+    [DataRow("128.0.0.0", false)]
+    [DataRow("::1", true)]
+    [DataRow("::2", false)]
+    [DataRow("::ffff:127.0.0.1", false)]
+    public void IPAnyAddress_IsLoopback_Test(string address, bool expected) => Assert.AreEqual(expected, IPAnyAddress.Parse(address).IsLoopback);
+
     private static object[][] Test_IPAddresses() =>
     [
         ["127.0.0.1"],

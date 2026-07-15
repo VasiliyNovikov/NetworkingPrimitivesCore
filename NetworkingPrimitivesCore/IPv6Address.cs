@@ -67,6 +67,12 @@ public readonly struct IPv6Address : IIPAddress<IPv6Address, UInt128>, IIPVersio
         get => Bytes[0] == 0xFE && Bytes[1] == 0x80;
     }
 
+    public bool IsLoopback
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => this == Loopback;
+    }
+
     public bool IsMulticast
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
