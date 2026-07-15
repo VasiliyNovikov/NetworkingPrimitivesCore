@@ -12,6 +12,15 @@ public class IPv4NetworkTests
     [TestMethod]
     public void IPv4Network_Size_Test() => Assert.AreEqual(12, Unsafe.SizeOf<IPv4Network>());
 
+    [TestMethod]
+    public void IPv4Network_Loopback_Test()
+    {
+        Assert.AreEqual(IPv4Network.Parse("127.0.0.0/8"), IPv4Network.Loopback);
+        Assert.IsTrue(IPv4Network.Loopback.Contains(IPv4Address.Parse("127.0.0.0")));
+        Assert.IsTrue(IPv4Network.Loopback.Contains(IPv4Address.Parse("127.255.255.255")));
+        Assert.IsFalse(IPv4Network.Loopback.Contains(IPv4Address.Parse("128.0.0.0")));
+    }
+
     private static IEnumerable<object[]> IPv4Network_Parse_Test_Data() =>
     [
        ["10.10.128.0/22", "10.10.128.0", 22, "255.255.252.0"],

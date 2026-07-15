@@ -7,6 +7,7 @@ public interface IIPAddressBase<T> : INetAddressBase<T>
     where T : unmanaged, IIPAddressBase<T>
 {
     bool IsLinkLocal { get; }
+    bool IsLoopback { get; }
 
     public static abstract explicit operator IPAddress(T address);
     public static abstract implicit operator T(IPAddress address);

@@ -48,7 +48,8 @@ Solution file: `NetworkingPrimitivesCore.slnx` (XML-based format).
 **Interface hierarchy** (CRTP-style self-referencing generics):
 - `INetPrimitive<T>` — base for all types; extends `IEquatable`, `IComparable`, `ISpanParsable`, `ISpanFormattable`, `IUtf8SpanFormattable`, `IUtf8SpanParsable`
 - `INetAddress<T, TUInt>` — adds `Bytes`, `Broadcast`, bitwise operators, `NetInt` convertibility
-- `IIPAddress<T, TUInt>` — adds `IsLinkLocal`, `Any`, `Loopback`, `Version`, `System.Net.IPAddress` conversion
+- `IIPAddressBase<T>` — adds `IsLinkLocal`, `IsLoopback`, and `System.Net.IPAddress` conversion
+- `IIPAddress<T, TUInt>` — adds `Any`, `Loopback`, and `Version`
 - `IIPNetwork<T, TAddress, TUInt>` — adds `Address`, `Mask`, `Prefix`, `Contains`, `Subnet`, `Supernet`
 - `IIPVersion<V>` / `IIPVersioned<V>` — version tag types (`IPv4`, `IPv6` sealed classes)
 

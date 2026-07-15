@@ -14,6 +14,13 @@ public class IPv6AddressTests
     [TestMethod]
     public void IPv6Address_Broadcast_Test() => Assert.AreEqual(IPv6Address.Parse("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"), IPv6Address.Broadcast);
 
+    [TestMethod]
+    [DataRow("::", false)]
+    [DataRow("::1", true)]
+    [DataRow("::2", false)]
+    [DataRow("::ffff:127.0.0.1", false)]
+    public void IPv6Address_IsLoopback_Test(string address, bool expected) => Assert.AreEqual(expected, IPv6Address.Parse(address).IsLoopback);
+
     private static object[][] Test_IPAddresses() =>
     [
         ["::"],

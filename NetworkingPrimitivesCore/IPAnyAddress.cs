@@ -70,6 +70,12 @@ public readonly struct IPAnyAddress
         get => _isV6 ? _ipv6Address.IsLinkLocal : _ipv4Address.IsLinkLocal;
     }
 
+    public bool IsLoopback
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => _isV6 ? _ipv6Address.IsLoopback : _ipv4Address.IsLoopback;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IPAnyAddress(ReadOnlySpan<byte> addressBytes)
     {
