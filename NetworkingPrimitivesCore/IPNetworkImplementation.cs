@@ -24,6 +24,12 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     public readonly TAddress Mask;
     public readonly byte Prefix;
 
+    public bool IsSingleAddress
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => Prefix == BitSize;
+    }
+
     public TAddress Gateway
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -12,6 +12,13 @@ public class IPv6NetworkTests
     [TestMethod]
     public void IPv6Network_Size_Test() => Assert.AreEqual(36, Unsafe.SizeOf<IPv6Network>());
 
+    [TestMethod]
+    public void IPv6Network_IsSingleAddress_Test()
+    {
+        Assert.IsTrue(IPv6Network.Parse("2001:db8::1/128").IsSingleAddress);
+        Assert.IsFalse(IPv6Network.Parse("2001:db8::/127").IsSingleAddress);
+    }
+
     private static IEnumerable<object[]> IPv6Network_Parse_Test_Data() =>
     [
        ["fec0::/64", "fec0::", 64, "ffff:ffff:ffff:ffff::" ],

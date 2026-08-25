@@ -12,6 +12,15 @@ public class IPAnyNetworkTests
     [TestMethod]
     public void IPNetwork_Size_Test() => Assert.AreEqual(40, Unsafe.SizeOf<IPAnyNetwork>());
 
+    [TestMethod]
+    public void IPNetwork_IsSingleAddress_Test()
+    {
+        Assert.IsTrue(IPAnyNetwork.Parse("192.0.2.1/32").IsSingleAddress);
+        Assert.IsFalse(IPAnyNetwork.Parse("192.0.2.0/31").IsSingleAddress);
+        Assert.IsTrue(IPAnyNetwork.Parse("2001:db8::1/128").IsSingleAddress);
+        Assert.IsFalse(IPAnyNetwork.Parse("2001:db8::/127").IsSingleAddress);
+    }
+
     private static IEnumerable<object[]> IPNetwork_Parse_Test_Data() =>
     [
        ["10.10.128.0/22", "10.10.128.0", 22, "255.255.252.0"],
