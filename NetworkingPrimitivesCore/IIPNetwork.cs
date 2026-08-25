@@ -11,6 +11,7 @@ public interface IIPNetworkBase<T, TAddress> : INetPrimitive<T>
     TAddress Address { get; }
     TAddress Mask { get; }
     byte Prefix { get; }
+    bool IsSingleAddress { get; }
     TAddress Gateway { get; }
     TAddress Broadcast { get; }
     bool Contains(TAddress address);

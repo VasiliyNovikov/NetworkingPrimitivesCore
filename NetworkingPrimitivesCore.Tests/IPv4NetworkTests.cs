@@ -21,6 +21,13 @@ public class IPv4NetworkTests
         Assert.IsFalse(IPv4Network.Loopback.Contains(IPv4Address.Parse("128.0.0.0")));
     }
 
+    [TestMethod]
+    public void IPv4Network_IsSingleAddress_Test()
+    {
+        Assert.IsTrue(IPv4Network.Parse("192.0.2.1/32").IsSingleAddress);
+        Assert.IsFalse(IPv4Network.Parse("192.0.2.0/31").IsSingleAddress);
+    }
+
     private static IEnumerable<object[]> IPv4Network_Parse_Test_Data() =>
     [
        ["10.10.128.0/22", "10.10.128.0", 22, "255.255.252.0"],

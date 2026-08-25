@@ -1,16 +1,16 @@
 using System;
-using System.Runtime.CompilerServices;
-using System.Numerics;
-using NetworkingPrimitivesCore.Formatting;
-using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
 
-using NetworkingPrimitivesCore.Json;
 using NetworkingPrimitivesCore.Converters;
+using NetworkingPrimitivesCore.Formatting;
+using NetworkingPrimitivesCore.Json;
 
-using NetAddress = NetworkingPrimitivesCore.IPv6Address;
 using IPNetworkImplementation = NetworkingPrimitivesCore.IPNetworkImplementation<NetworkingPrimitivesCore.IPv6Address, System.UInt128>;
+using NetAddress = NetworkingPrimitivesCore.IPv6Address;
 
 namespace NetworkingPrimitivesCore;
 
@@ -49,6 +49,12 @@ public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => _implementation.Prefix;
+    }
+
+    public bool IsSingleAddress
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => _implementation.IsSingleAddress;
     }
 
     public NetAddress Gateway

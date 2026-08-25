@@ -47,6 +47,12 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
         get => _isV6 ? _ipv6Network.Prefix : _ipv4Network.Prefix;
     }
 
+    public bool IsSingleAddress
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => _isV6 ? _ipv6Network.IsSingleAddress : _ipv4Network.IsSingleAddress;
+    }
+
     public bool IsV6
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

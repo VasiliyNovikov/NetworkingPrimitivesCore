@@ -1,16 +1,16 @@
 using System;
-using System.Runtime.CompilerServices;
-using System.Numerics;
-using NetworkingPrimitivesCore.Formatting;
-using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
 
-using NetworkingPrimitivesCore.Json;
 using NetworkingPrimitivesCore.Converters;
+using NetworkingPrimitivesCore.Formatting;
+using NetworkingPrimitivesCore.Json;
 
-using NetAddress = NetworkingPrimitivesCore.IPv4Address;
 using IPNetworkImplementation = NetworkingPrimitivesCore.IPNetworkImplementation<NetworkingPrimitivesCore.IPv4Address, uint>;
+using NetAddress = NetworkingPrimitivesCore.IPv4Address;
 
 namespace NetworkingPrimitivesCore;
 
@@ -55,6 +55,12 @@ public readonly struct IPv4Network : IIPNetwork<IPv4Network, NetAddress, uint>, 
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => _implementation.Prefix;
+    }
+
+    public bool IsSingleAddress
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => _implementation.IsSingleAddress;
     }
 
     public NetAddress Gateway
