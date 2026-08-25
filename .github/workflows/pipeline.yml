@@ -41,10 +41,43 @@ jobs:
           path: TestResults-${{ matrix.os }}
         if: ${{ always() }}
 
+  validate-big-endian:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v4
+        with:
+          platforms: s390x
+
+      - name: Build & Test
+        run: |
+          docker run --rm --platform linux/s390x \
+            -v "${{ github.workspace }}:/src" -w /src \
+            registry.access.redhat.com/dotnet/sdk:10.0 /bin/bash -lc '
+            set -eu
+            dotnet build NetworkingPrimitivesCore.Tests/NetworkingPrimitivesCore.Tests.csproj -f net10.0
+            dotnet test NetworkingPrimitivesCore.Tests/NetworkingPrimitivesCore.Tests.csproj -f net10.0 --no-build --logger trx --results-directory /src/TestResults-s390x -- RunConfiguration.TreatNoTestsAsError=true
+          '
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-s390x
+          path: TestResults-s390x
+        if: ${{ always() }}
+
   publish:
     if: ${{ success() && (vars.PUBLISH == 'true' || vars.PUBLISH == 'auto' && github.ref_name == 'master') }}
     needs:
       - validate
+      - validate-big-endian
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

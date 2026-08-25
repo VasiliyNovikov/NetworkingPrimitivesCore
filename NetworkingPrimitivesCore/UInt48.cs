@@ -29,12 +29,17 @@ public readonly struct UInt48
         {
             ulong result = 0;
             Unsafe.As<ulong, Data>(ref result) = _data;
-            return result;
+            return BitConverter.IsLittleEndian ? result : result >> 16;
         }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private UInt48(ulong value) => _data = Unsafe.As<ulong, Data>(ref Unsafe.AsRef(in value));
+    private UInt48(ulong value)
+    {
+        if (!BitConverter.IsLittleEndian)
+            value <<= 16;
+        _data = Unsafe.As<ulong, Data>(ref value);
+    }
 
     public static UInt48 One { get; } = new(1);
 
