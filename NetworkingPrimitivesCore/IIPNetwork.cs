@@ -51,4 +51,7 @@ public interface IIPNetwork<T, TAddress> : IIPNetworkBase<T, TAddress>
 public interface IIPNetwork<T, TAddress, TUInt> : IIPNetwork<T, TAddress>
     where T : unmanaged, IIPNetwork<T, TAddress, TUInt>
     where TAddress : unmanaged, IIPAddress<TAddress, TUInt>
-    where TUInt : unmanaged, IBinaryInteger<TUInt>, IUnsignedNumber<TUInt>;
+    where TUInt : unmanaged, IBinaryInteger<TUInt>, IUnsignedNumber<TUInt>
+{
+    TUInt LastAddressIndex { get; }
+}

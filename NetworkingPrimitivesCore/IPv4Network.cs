@@ -75,6 +75,12 @@ public readonly struct IPv4Network : IIPNetwork<IPv4Network, NetAddress, uint>, 
         get => _implementation.Broadcast;
     }
 
+    public uint LastAddressIndex
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => _implementation.LastAddressIndex;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private IPv4Network(IPNetworkImplementation implementation) => _implementation = implementation;
 

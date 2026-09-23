@@ -69,6 +69,12 @@ public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128
         get => _implementation.Broadcast;
     }
 
+    public UInt128 LastAddressIndex
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => _implementation.LastAddressIndex;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private IPv6Network(IPNetworkImplementation implementation) => _implementation = implementation;
 

@@ -19,6 +19,45 @@ public class IPv6NetworkTests
         Assert.IsFalse(IPv6Network.Parse("2001:db8::/127").IsSingleAddress);
     }
 
+    private static IEnumerable<object[]> IPv6Network_LastAddressIndex_Test_Data() =>
+    [
+        ["::/0", UInt128.MaxValue, "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"],
+        ["8000::/1", UInt128.MaxValue >> 1, "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"],
+        ["2001:db8::/64", (UInt128)ulong.MaxValue, "2001:db8::ffff:ffff:ffff:ffff"],
+        ["2001:db8::/127", UInt128.One, "2001:db8::1"],
+        ["2001:db8::1/128", UInt128.Zero, "2001:db8::1"]
+    ];
+
+    [TestMethod]
+    [DynamicData(nameof(IPv6Network_LastAddressIndex_Test_Data))]
+    public void IPv6Network_LastAddressIndex_Test(string networkString, UInt128 expectedIndex, string lastAddressString)
+    {
+        var network = IPv6Network.Parse(networkString);
+        Assert.AreEqual(expectedIndex, network.LastAddressIndex);
+        Assert.AreEqual(IPv6Address.Parse(lastAddressString), network[network.LastAddressIndex]);
+        Assert.AreEqual(network.Broadcast, network.AddressAt(network.LastAddressIndex));
+        if (expectedIndex < UInt128.MaxValue)
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => network.AddressAt(expectedIndex + 1));
+    }
+
+    [TestMethod]
+    public void IPv6Network_LastAddressIndex_Default_Test()
+    {
+        var network = default(IPv6Network);
+        Assert.AreEqual(UInt128.MaxValue, network.LastAddressIndex);
+        Assert.AreEqual(IPv6Address.Broadcast, network[network.LastAddressIndex]);
+    }
+
+    [TestMethod]
+    public void IPv6Network_Supernet_ZeroPrefix_Test()
+    {
+        var network = IPv6Network.Parse("2001:db8::/64").Supernet(0);
+        Assert.AreEqual(IPv6Network.Parse("::/0"), network);
+        Assert.AreEqual(default(IPv6Address), network.Mask);
+        Assert.AreEqual(UInt128.MaxValue, network.LastAddressIndex);
+        Assert.AreEqual(IPv6Address.Broadcast, network[network.LastAddressIndex]);
+    }
+
     private static IEnumerable<object[]> IPv6Network_Parse_Test_Data() =>
     [
        ["fec0::/64", "fec0::", 64, "ffff:ffff:ffff:ffff::" ],
