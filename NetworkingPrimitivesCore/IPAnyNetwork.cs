@@ -77,6 +77,12 @@ public readonly struct IPAnyNetwork : IIPNetworkBase<IPAnyNetwork, IPAnyAddress>
         get => _isV6 ? _ipv6Network.Broadcast : _ipv4Network.Broadcast;
     }
 
+    public UInt128 LastAddressIndex
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => _isV6 ? _ipv6Network.LastAddressIndex : _ipv4Network.LastAddressIndex;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IPAnyNetwork(IPAnyAddress address, byte? prefix = null, bool strict = true)
     {

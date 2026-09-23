@@ -28,6 +28,40 @@ public class IPv4NetworkTests
         Assert.IsFalse(IPv4Network.Parse("192.0.2.0/31").IsSingleAddress);
     }
 
+    [TestMethod]
+    [DataRow("0.0.0.0/0", uint.MaxValue, "255.255.255.255")]
+    [DataRow("128.0.0.0/1", 2147483647u, "255.255.255.255")]
+    [DataRow("192.0.2.0/24", 255u, "192.0.2.255")]
+    [DataRow("192.0.2.0/31", 1u, "192.0.2.1")]
+    [DataRow("192.0.2.1/32", 0u, "192.0.2.1")]
+    public void IPv4Network_LastAddressIndex_Test(string networkString, uint expectedIndex, string lastAddressString)
+    {
+        var network = IPv4Network.Parse(networkString);
+        Assert.AreEqual(expectedIndex, network.LastAddressIndex);
+        Assert.AreEqual(IPv4Address.Parse(lastAddressString), network[network.LastAddressIndex]);
+        Assert.AreEqual(network.Broadcast, network.AddressAt(network.LastAddressIndex));
+        if (expectedIndex < uint.MaxValue)
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => network.AddressAt(expectedIndex + 1));
+    }
+
+    [TestMethod]
+    public void IPv4Network_LastAddressIndex_Default_Test()
+    {
+        IPv4Network network = default;
+        Assert.AreEqual(uint.MaxValue, network.LastAddressIndex);
+        Assert.AreEqual(IPv4Address.Broadcast, network[network.LastAddressIndex]);
+    }
+
+    [TestMethod]
+    public void IPv4Network_Supernet_ZeroPrefix_Test()
+    {
+        var network = IPv4Network.Parse("192.0.2.0/24").Supernet(0);
+        Assert.AreEqual(IPv4Network.Parse("0.0.0.0/0"), network);
+        Assert.AreEqual(default, network.Mask);
+        Assert.AreEqual(uint.MaxValue, network.LastAddressIndex);
+        Assert.AreEqual(IPv4Address.Broadcast, network[network.LastAddressIndex]);
+    }
+
     private static IEnumerable<object[]> IPv4Network_Parse_Test_Data() =>
     [
        ["10.10.128.0/22", "10.10.128.0", 22, "255.255.252.0"],

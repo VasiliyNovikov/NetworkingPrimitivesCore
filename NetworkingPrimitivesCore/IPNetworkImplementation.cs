@@ -14,7 +14,7 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     where TUInt : unmanaged, IBinaryInteger<TUInt>, IUnsignedNumber<TUInt>
 {
     private static readonly byte BitSize = (byte)(Unsafe.SizeOf<TUInt>() * 8);
-    private static readonly TUInt[] IntMaskCache = [.. Enumerable.Range(0, BitSize + 1).Select(prefix => TUInt.AllBitsSet << (BitSize - prefix))];
+    private static readonly TUInt[] IntMaskCache = [.. Enumerable.Range(0, BitSize + 1).Select(prefix => prefix == 0 ? TUInt.Zero : TUInt.AllBitsSet << (BitSize - prefix))];
     private static readonly TUInt[] IntHostMaskCache = [.. IntMaskCache.Select(mask => ~mask)];
     private static readonly TAddress[] MaskCache = [.. IntMaskCache.Select(mask => (TAddress)mask)];
 
@@ -39,7 +39,13 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
     public TAddress Broadcast
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => AddressAt(IntHostMaskCache[Prefix]);
+        get => AddressAt(LastAddressIndex);
+    }
+
+    public TUInt LastAddressIndex
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => IntHostMaskCache[Prefix];
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -77,7 +83,7 @@ internal readonly struct IPNetworkImplementation<TAddress, TUInt>
         where TIndex : unmanaged, IBinaryInteger<TIndex>
     {
         var intIndex = TUInt.CreateChecked(index);
-        return intIndex > IntHostMaskCache[Prefix]
+        return intIndex > LastAddressIndex
             ? throw new ArgumentOutOfRangeException(nameof(index))
             : intIndex == TUInt.Zero
                 ? Address

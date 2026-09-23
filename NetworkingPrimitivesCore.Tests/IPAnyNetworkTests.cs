@@ -21,6 +21,34 @@ public class IPAnyNetworkTests
         Assert.IsFalse(IPAnyNetwork.Parse("2001:db8::/127").IsSingleAddress);
     }
 
+    private static IEnumerable<object[]> IPNetwork_LastAddressIndex_Test_Data() =>
+    [
+        ["0.0.0.0/0", (UInt128)uint.MaxValue, "255.255.255.255"],
+        ["192.0.2.0/24", (UInt128)255, "192.0.2.255"],
+        ["192.0.2.1/32", (UInt128)0, "192.0.2.1"],
+        ["::/0", UInt128.MaxValue, "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"],
+        ["2001:db8::/64", (UInt128)ulong.MaxValue, "2001:db8::ffff:ffff:ffff:ffff"],
+        ["2001:db8::1/128", (UInt128)0, "2001:db8::1"]
+    ];
+
+    [TestMethod]
+    [DynamicData(nameof(IPNetwork_LastAddressIndex_Test_Data))]
+    public void IPNetwork_LastAddressIndex_Test(string networkString, UInt128 expectedIndex, string lastAddressString)
+    {
+        var network = IPAnyNetwork.Parse(networkString);
+        Assert.AreEqual(expectedIndex, network.LastAddressIndex);
+        Assert.AreEqual(IPAnyAddress.Parse(lastAddressString), network[network.LastAddressIndex]);
+        Assert.AreEqual(network.Broadcast, network.AddressAt(network.LastAddressIndex));
+    }
+
+    [TestMethod]
+    public void IPNetwork_LastAddressIndex_Default_Test()
+    {
+        var network = default(IPAnyNetwork);
+        Assert.AreEqual(uint.MaxValue, network.LastAddressIndex);
+        Assert.AreEqual(IPv4Address.Broadcast, network[network.LastAddressIndex]);
+    }
+
     private static IEnumerable<object[]> IPNetwork_Parse_Test_Data() =>
     [
        ["10.10.128.0/22", "10.10.128.0", 22, "255.255.252.0"],
