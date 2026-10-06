@@ -31,6 +31,8 @@ public readonly struct IPv6Network : IIPNetwork<IPv6Network, NetAddress, UInt128
         get => NetAddress.Version;
     }
 
+    public static IPv6Network IPv4MappedToIPv6 { get; } = new((NetAddress)new UInt128(0UL, 0x00_00_FF_FF_00_00_00_00UL), 96);
+
     private readonly IPNetworkImplementation _implementation;
 
     public NetAddress Address
