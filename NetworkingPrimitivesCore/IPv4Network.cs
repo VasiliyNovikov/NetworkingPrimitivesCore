@@ -31,11 +31,7 @@ public readonly struct IPv4Network : IIPNetwork<IPv4Network, NetAddress, uint>, 
         get => NetAddress.Version;
     }
 
-    public static IPv4Network Loopback
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => new((NetAddress)0x7F_00_00_00u, 8);
-    }
+    public static IPv4Network Loopback { get; } = new((NetAddress)0x7F_00_00_00u, 8);
 
     private readonly IPNetworkImplementation _implementation;
 
